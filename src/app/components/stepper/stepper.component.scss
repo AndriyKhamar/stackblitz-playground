@@ -1,0 +1,156 @@
+// steps.component.scss
+
+// variables
+$separator-height: 2px;
+$icon-size: 22px;
+$label-gap: 8px;
+$gap-between-items: 12px;
+$active-color: #0b74de;
+$inactive-color: #bdbdbd;
+$bg: #fff;
+$text-color: #222;
+$dot-color: #bbb;
+
+.steps-container {
+  width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+  background: $bg;
+  padding: 20px 20px;
+  border: 2px solid blue;
+  border-radius: 8px;
+}
+
+.steps {
+  display: flex;
+  align-items: center;
+  gap: $gap-between-items;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  /* permitir que los pasos se repartan si el contenedor es ancho */
+  justify-content: space-between;
+}
+
+/* Cada wrapper contiene el paso y el separator (si existe) */
+.step-wrapper {
+  display: contents; /* deja que .step y .separator fluyan en el flex container */
+}
+
+/* Paso visual */
+.step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  min-width: $icon-size; /* evita colapsar cuando el contenedor es pequeño */
+  /* para que los pasos 1/3/5 puedan crecer, damos flex-grow */
+  flex: 1 1 auto;
+  max-width: 160px;
+  text-align: center;
+  outline: none;
+
+  &.active {
+    .icon {
+      border-color: $active-color;
+      background: linear-gradient(180deg, lighten($active-color, 35%), $active-color);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba($active-color, 0.2);
+    }
+
+    .label {
+      color: $active-color;
+      font-weight: 600;
+    }
+  }
+
+  /* icon: fijo, centrado, circular */
+  .icon {
+    width: $icon-size;
+    height: $icon-size;
+    border-radius: 50%;
+    background: #f2f2f2;
+    border: 2px solid $inactive-color;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-sizing: border-box;
+    z-index: 2;
+  }
+
+  /* label posicionado absolutamente por debajo del icono */
+  .label {
+    position: absolute;
+    top: calc(#{$icon-size} + #{$label-gap});
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    color: $text-color;
+    font-size: 13px;
+    line-height: 1;
+    z-index: 2;
+  }
+}
+
+/* separator: ocupa el espacio horizontal entre pasos y se dibuja como línea discontinua */
+.separator {
+  flex: 0 1 auto;
+  /* ancho base; se adaptará porque el contenedor es flex */
+  width: 100%;
+  height: $separator-height;
+  align-self: center;
+  margin: 0 8px;
+  position: relative;
+  z-index: 1;
+
+  /* línea discontinua tipo puntos usando repeating-linear-gradient */
+  background-image: repeating-linear-gradient(
+    to right,
+    $dot-color 0,
+    $dot-color 4px,
+    transparent 4px,
+    transparent 10px
+  );
+  background-size: auto 100%;
+}
+
+/* adaptar proporciones: si quieres que bloques 2 y 4 sean exactamente 100px de ancho,
+   aplicamos clases especiales usando nth-child en el wrapper */
+.steps {
+  /* forzar que el segundo y cuarto step tengan ancho fijo (índices 2 y 4) */
+  > .step-wrapper:nth-child(2n + 2) { /* esto selecciona 2,4,6 but our wrappers include separators so we target actual step elements below */
+    /* no se usa aquí porque .step-wrapper es display:contents.
+       mejor objetivo directo: seleccionar .step según su posición en el flujo visual */
+  }
+}
+
+/* Targeteo fiable: seleccionar los .step que correspondan a índice 2 y 4
+   usando :nth-of-type sobre la lista de pasos visibles: */
+.steps > li > .step:nth-of-type(1),
+.steps > li > .step:nth-of-type(2) {
+  /* fallback, no se usa; en la práctica es más sencillo añadir clases desde Angular */
+}
+
+/* Recomendación práctica: añadir clases 'fixed' desde Angular a los pasos 2 y 4.
+   Para entregar el CSS final que respeta tu requerimiento, incluimos la regla .fixed. */
+
+.step.fixed {
+  flex: 0 0 100px; /* ancho fijo de 100px */
+  max-width: 100px;
+}
+
+/* Estilos responsivos */
+@media (max-width: 640px) {
+  .steps {
+    gap: 6px;
+  }
+  .step .label {
+    font-size: 12px;
+  }
+  .icon {
+    width: 36px;
+    height: 36px;
+  }
+}

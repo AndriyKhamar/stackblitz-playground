@@ -1,0 +1,117 @@
+<!-- Botón que abre el diálogo -->
+<button
+  id="openDialogButton"
+  aria-haspopup="dialog"
+  aria-controls="exampleDialog"
+  (click)="openDialog()"
+>
+  Destination category
+</button>
+<button
+  id="openDialogButton2"
+  aria-haspopup="dialog"
+  aria-controls="exampleDialog2"
+  (click)="openDialog2()"
+>
+  Pax selector
+</button>
+<button
+  id="openDialogButton3"
+  aria-haspopup="dialog"
+  aria-controls="exampleDialog3"
+  (click)="openDialog3()"
+>
+  Other selector
+</button>
+
+<!-- Modal accesible1 -->
+<div
+  #destinationDialog
+  id="exampleDialog"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="dialogTitle"
+  class="modal"
+  *ngIf="isOpenDestination"
+>
+  <h2 id="dialogTitle">Destination category</h2>
+  <ul>
+    <li>
+      <input type="checkbox" id="option1" />
+      <label for="option1">City Trip (28)</label>
+    </li>
+    <ng-container *ngIf="readyToLoadDestination">
+      <li>
+        <input type="checkbox" id="option2" />
+        <label for="option2">Culture (23)</label>
+      </li>
+      <li>
+        <input type="checkbox" id="option3" />
+        <label for="option3">Shopping (19)</label>
+      </li>
+    </ng-container>
+  </ul>
+
+  <button (click)="closeDialog()">Apply</button>
+  <button (click)="closeDialog()">Close</button>
+</div>
+
+<!-- Modal accesible2 -->
+<div
+  #paxDialog
+  id="exampleDialog2"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="dialogTitle2"
+  class="modal"
+  *ngIf="isOpenPax"
+>
+  <h2 id="dialogTitle2">Pax component</h2>
+  <ul>
+    <li>
+      <button disabled>decreaste Adult</button>
+      <button (click)="increase('adults')">Increase Adult</button>
+      <label>
+        <input type="text" [value]="adults" readonly />
+      </label>
+    </li>
+    <span [attr.aria-hidden]="hidePaxArea">
+      <li>
+        <button (click)="increase('childs')">Increase Childs</button>
+        <label>
+          <input type="text" [value]="childs" readonly />
+        </label>
+      </li>
+      <li>
+        <button (click)="increase('infants')">Increase Infants</button>
+        <label>
+          <input type="text" [value]="infants" readonly />
+        </label>
+      </li>
+    </span>
+  </ul>
+  <button (click)="closeDialog2()">Close</button>
+</div>
+
+<!-- Modal accesible3 -->
+<div
+  #otherDialog
+  id="exampleDialog3"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="dialogTitle3X"
+  class="modal"
+  *ngIf="isOpenOther"
+>
+  <!-- <h2 id="dialogTitle3">Other component</h2> -->
+  <button (click)="closeDialog3()">Close</button>
+  <p hidden class="bodyL marginBottom-l">
+    <strong
+      >Travel mode never ends with us. Enter your details and... let's
+      go!</strong
+    >
+  </p>
+  <input type="text" class="sr-only" placeholder="test" />
+  <button>Test</button>
+  <input type="text" />
+</div>

@@ -1,0 +1,42 @@
+<!-- OPCIÓN 1: Card normal (no clicable) -->
+<div 
+  *ngIf="!clickable"
+  class="card" 
+  [class.elevated]="elevated">
+  <div class="card-header" *ngIf="title">
+    <h3>{{ title }}</h3>
+  </div>
+  <div class="card-content">
+    <ng-content></ng-content>
+  </div>
+  <div class="card-footer" *ngIf="hasFooter">
+    <ng-content select="[slot=footer]"></ng-content>
+  </div>
+</div>
+
+<!-- OPCIÓN 2: Pseudo-contenido (enlace invisible) -->
+<div 
+  *ngIf="clickable && !linkUrl"
+  class="card card-clickable" 
+  [class.elevated]="elevated">
+  
+  <!-- Enlace invisible que cubre toda la card -->
+  <a 
+    [href]="pseudoLinkUrl || '#'"
+    class="card-pseudo-link"
+    [attr.aria-label]="ariaLabel"
+    (click)="onPseudoLinkClick($event)">
+    <span class="sr-only">{{ ariaLabel }}</span>
+  </a>
+  
+  <div class="card-header" *ngIf="title">
+    <h3>{{ title }}</h3>
+  </div>
+  <div class="card-content">
+    <ng-content></ng-content>
+  </div>
+  <div class="card-footer" *ngIf="hasFooter">
+    <ng-content select="[slot=footer]"></ng-content>
+  </div>
+</div>
+

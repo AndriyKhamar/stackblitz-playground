@@ -1,0 +1,46 @@
+.calendar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin: 0 1rem;
+}
+
+[role='grid'] {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+[role='row'] {
+  display: flex;
+  flex-direction: row;
+}
+
+.day-cell {
+  flex: 1;
+  padding: 0.25rem;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.day-cell[aria-selected='true'] .day-button {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+.day-button {
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}

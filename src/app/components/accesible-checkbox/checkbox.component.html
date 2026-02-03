@@ -1,0 +1,42 @@
+<div>
+<label
+  class="cb"
+  [class.cb--checked]="isChecked"
+  [class.cb--readonly]="isReadOnly"
+  [class.cb--focused]="hasFocus"
+  [attr.data-variant]="variant"
+  [attr.data-disable-styles]="disableBuiltInStyles ? 'true' : null"
+  [class]="hostClass"
+>
+  <input
+    class="cb__input"
+    [id]="id"
+    [name]="name"
+    [type]="type"
+    [checked]="isChecked"
+    [disabled]="isReadOnly || disabled"
+    [required]="isRequired"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+    (change)="toggleValue($event)"
+  />
+  <span class="cb__box" aria-hidden="true">
+    <svg
+      class="cb__icon"
+      viewBox="0 0 16 16"
+      focusable="false"
+      aria-hidden="true"
+    >
+      <polyline
+        points="3.5 8.5 6.5 11.5 12.5 4.5"
+        stroke-width="2"
+        fill="none"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </span>
+  <span class="cb__label" [innerHTML]="label"></span>
+</label>
+</div>

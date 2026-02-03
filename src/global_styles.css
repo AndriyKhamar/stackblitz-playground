@@ -1,0 +1,4 @@
+/* Add application styles & imports to this file! */
+
+/* Importar estilos de tooltip globalmente */
+@import './app/directives/tooltip.directive.css';

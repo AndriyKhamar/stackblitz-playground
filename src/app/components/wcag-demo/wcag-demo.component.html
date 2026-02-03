@@ -1,0 +1,88 @@
+<div class="wcag-demo-container">
+  <header class="wcag-header">
+    <h1>Demo de Accesibilidad Web - WCAG 2.1</h1>
+    <p class="intro">
+      Esta página interactiva muestra ejemplos de criterios WCAG 2.1. Haz clic en cada criterio
+      para comparar código no accesible vs accesible.
+    </p>
+  </header>
+
+  <main class="wcag-main">
+    <div class="cases-list">
+      <div
+        *ngFor="let case of wcagCases"
+        class="wcag-case"
+        [class.expanded]="isExpanded(case.id)"
+      >
+        <button
+          class="case-header"
+          (click)="toggleCase(case.id)"
+          [attr.aria-expanded]="isExpanded(case.id)"
+          [attr.aria-controls]="'case-content-' + case.id"
+        >
+          <span class="criterion-badge">{{ case.criterion }}</span>
+          <span class="case-title">{{ case.name }}</span>
+          <span class="toggle-icon" aria-hidden="true">
+            {{ isExpanded(case.id) ? '▼' : '▶' }}
+          </span>
+        </button>
+
+        <div
+          [id]="'case-content-' + case.id"
+          class="case-content"
+          *ngIf="isExpanded(case.id)"
+        >
+          <div class="case-description">
+            <h3>Descripción</h3>
+            <p>{{ case.description }}</p>
+          </div>
+
+          <div class="code-comparison">
+            <div class="code-block inaccessible">
+              <h4>❌ No Accesible</h4>
+              <pre><code [innerHTML]="case.inaccessibleExample"></code></pre>
+            </div>
+
+            <div class="code-block accessible">
+              <h4>✅ Accesible</h4>
+              <pre><code [innerHTML]="case.accessibleExample"></code></pre>
+            </div>
+          </div>
+
+          <div class="case-explanation">
+            <h4>Explicación</h4>
+            <p>{{ case.explanation }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="wcag-sidebar" role="complementary" aria-label="Información adicional">
+      <h2>Niveles WCAG</h2>
+      <dl>
+        <dt><strong>A</strong></dt>
+        <dd>Nivel básico de conformidad.</dd>
+
+        <dt><strong>AA</strong></dt>
+        <dd>Recomendado. Mejora accesibilidad para la mayoría.</dd>
+
+        <dt><strong>AAA</strong></dt>
+        <dd>Máximo nivel. Accesibilidad óptima.</dd>
+      </dl>
+
+      <h2>Recursos</h2>
+      <ul>
+        <li>
+          <a href="https://www.w3.org/TR/WCAG21/" target="_blank" rel="noopener noreferrer">
+            WCAG 2.1 oficial
+          </a>
+        </li>
+        <li>
+          <a href="https://www.w3.org/WAI/" target="_blank" rel="noopener noreferrer">
+            Web Accessibility Initiative (WAI)
+          </a>
+        </li>
+      </ul>
+    </aside>
+  </main>
+</div>

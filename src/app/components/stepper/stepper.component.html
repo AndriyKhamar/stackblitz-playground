@@ -1,0 +1,13 @@
+<nav class="steps-container" role="navigation" aria-label="Booking progress">
+  <ul class="steps" role="list">
+    <li *ngFor="let step of steps; let i = index" class="step-wrapper" role="listitem">
+      <div class="step" [class.active]="i === activeIndex" tabindex="0">
+        <div class="icon" aria-hidden="true">{{ step.icon }}</div>
+        <div class="label">{{ step.title }}</div>
+      </div>
+
+      <!-- separator: se renderiza después de cada paso excepto el último -->
+      <div *ngIf="i < steps.length - 1" class="separator" aria-hidden="true"></div>
+    </li>
+  </ul>
+</nav>

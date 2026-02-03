@@ -1,0 +1,146 @@
+// Variables base (puedes exponerlas en :host para override)
+:host {
+  --cb-size-sm: 14px;
+  --cb-size-md: 18px;
+  --cb-size-lg: 24px;
+
+  --cb-gap: 0.1rem;
+  --cb-bg: #fff;
+  --cb-border: 1px solid #cfcfcf;
+  --cb-border-radius: 4px;
+  --cb-checked-bg: #0a74da;
+  --cb-checked-border: 1px solid #0a74da;
+  --cb-check-color: #fff;
+  --cb-label-color: #222;
+
+  display: flex;
+}
+
+// Mixins útiles
+@mixin size-by($size) {
+  @if $size == sm {
+    width: var(--cb-size-sm);
+    height: var(--cb-size-sm);
+  } @else if $size == lg {
+    width: var(--cb-size-lg);
+    height: var(--cb-size-lg);
+  } @else {
+    width: var(--cb-size-md);
+    height: var(--cb-size-md);
+  }
+}
+
+// Root block
+
+.cb {
+  display: flex;
+  align-items: center;
+  gap: var(--cb-gap);
+  cursor: pointer;
+  user-select: none;
+  color: var(--cb-label-color);
+  line-height: 1;
+
+  // input visually accessible but hidden from layout
+  &__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  &__box {
+    display: inline-grid;
+    place-items: center;
+    box-sizing: border-box;
+    background: var(--cb-bg);
+    border: var(--cb-border);
+    color: var(--cb-check-color);
+    @include size-by(md);
+    border-radius: var(--cb-border-radius);
+    transition: background 0.12s ease, border-color 0.12s ease,
+      transform 0.06s ease;
+  }
+
+  // check icon hidden unless checked
+  &__icon {
+    width: 60%;
+    height: 60%;
+    stroke: currentColor;
+    display: none;
+  }
+
+  &__label {
+    display: inline-block;
+  }
+
+  &--checked {
+    .cb__box {
+      background: var(--cb-checked-bg);
+      border: var(--cb-checked-border);
+    }
+    .cb__icon {
+      display: block;
+    }
+  }
+
+  &--readonly {
+    cursor: default;
+    opacity: 0.7;
+  }
+
+  &--focused {
+    outline: none;
+    .cb__box {
+      box-shadow: 0 0 0 3px rgba(10, 116, 218, 0.12);
+    }
+  }
+
+  // variants via data-attribute
+  &[data-variant='ghost'] {
+    --cb-checked-bg: transparent;
+    --cb-border: 1px dashed #bdbdbd;
+  }
+
+  &[data-variant='accent'] {
+    --cb-checked-bg: #ff6a00;
+    --cb-checked-border: 1px solid #ff6a00;
+  }
+
+  // size modifier: host can set class or input controls size
+  &.small {
+    @include size-by(sm);
+  }
+  &.large {
+    @include size-by(lg);
+  }
+}
+
+/* ===========================================
+   Mecanismo para desactivar estilos integrados
+   =========================================== */
+
+/* Nota: no uses all: unset a ciegas. Dejamos reglas mínimas para accesibilidad. */
+:host([data-disable-styles='true']) {
+  display: inline;
+}
+
+:host([data-disable-styles='true']) .cb {
+  gap: 0;
+  cursor: inherit;
+  color: inherit;
+  /* Mantener el input accesible y visible según el consumidor */
+}
+
+:host([data-disable-styles='true']) .cb__box {
+  background: transparent;
+  border: none;
+  width: auto;
+  height: auto;
+  box-shadow: none;
+}
+
+:host([data-disable-styles='true']) .cb__icon {
+  display: none;
+}
