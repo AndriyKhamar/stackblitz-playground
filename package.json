@@ -3,8 +3,12 @@
   "private": true,
   "scripts": {
     "ng": "ng",
-    "start": "NODE_OPTIONS=--openssl-legacy-provider ng serve",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider ng build"
+    "start": "ng serve",
+    "start:4200": "ng serve --port 4200",
+    "start:4201": "ng serve --port 4201",
+    "start:legacy": "cross-env NODE_OPTIONS=--openssl-legacy-provider ng serve",
+    "build": "ng build",
+    "build:legacy": "cross-env NODE_OPTIONS=--openssl-legacy-provider ng build"
   },
   "dependencies": {
     "@angular/animations": "7.2.15",
@@ -26,6 +30,7 @@
     "@angular/compiler-cli": "7.2.15",
     "@angular/language-service": "7.2.15",
     "@types/node": "~8.9.4",
+    "cross-env": "^7.0.3",
     "sass": "^1.94.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
