@@ -1,0 +1,102 @@
+.combo-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+}
+
+/* Caja completa interactuable (incluye label + iconos) */
+.combo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  border: 1px solid #c7c7c7;
+  border-radius: 6px;
+  padding: 8px 10px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.combo:focus-within {
+  outline: 2px solid #0b6cff;
+  outline-offset: 2px;
+}
+
+.combo:hover {
+  border-color: #9d9d9d;
+}
+
+.combo-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.combo-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2b2b2b;
+  user-select: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* Input: ocupa el espacio disponible sin invadir iconos */
+.combo-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background: transparent;
+  cursor: inherit;
+}
+
+.combo-input[readonly] {
+  caret-color: transparent;
+}
+
+.combo.combo--edit {
+  cursor: text;
+}
+
+.combo.combo--edit .combo-input {
+  cursor: text;
+  caret-color: auto;
+}
+
+.combo-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  flex: 0 0 auto;
+  padding: 0;
+}
+
+.combo-icon-right {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.combo-icon-left.iconOk::before {
+  content: '✔️';
+}
+
+.combo-icon-right.iconX::before {
+  content: '❌';
+}
+
+/* When rendered as a span (non-actionable), it should not block clicks */
+span.combo-icon-right {
+  pointer-events: none;
+}

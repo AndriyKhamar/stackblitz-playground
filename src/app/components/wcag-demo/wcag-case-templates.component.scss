@@ -1,0 +1,652 @@
+label {
+    font-weight: 500;
+    margin-right: 10px;
+}
+
+.wcag-example {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.wcag-example-note {
+  margin: 12px 0 0 0;
+  padding: 10px 12px;
+  border: 1px solid #d0d7de;
+  border-radius: 10px;
+  background: #f6f8fa;
+  color: #374151;
+  line-height: 1.4;
+}
+
+.wcag-example-note:last-child {
+  margin-top: auto;
+}
+
+.wcag-form-demo {
+  max-width: 420px;
+}
+
+.wcag-field {
+  margin: 12px 0;
+}
+
+.wcag-fake-label,
+.wcag-label {
+  display: block;
+  margin: 0 0 6px 0;
+  font-weight: 800;
+  color: #222;
+}
+
+.wcag-form-demo input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #999;
+  border-radius: 8px;
+}
+
+.wcag-hint {
+  margin: 6px 0 0 0;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.wcag-subexample {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 2px dashed #cfcfcf69;
+}
+
+.wcag-subexample--first {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.wcag-panel {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border: 1px solid #202cd3;
+  border-radius: 10px;
+  background: #aac7f3;
+}
+
+.wcag-panel-title {
+  margin: 0 0 6px 0;
+}
+
+.wcag-panel-body {
+  margin: 0;
+  color: #333;
+  line-height: 1.4;
+}
+
+.wrap {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.label {
+  font-weight: 800;
+  margin: 0 0 8px 0;
+}
+
+.hint {
+  margin: 8px 0 0 0;
+  color: #555;
+}
+
+.code {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  overflow: auto;
+}
+
+.code code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+.wcag-primary {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: #1a73e8;
+  color: #fff;
+  font-weight: 800;
+}
+
+.wcag-error {
+  display: inline-block;
+  margin-top: 8px;
+  color: #b00020;
+  font-weight: 800;
+}
+
+/* 1.2.x media */
+video {
+  width: 100%;
+  max-width: 620px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #000;
+}
+
+.transcript,
+.alt {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  max-width: 620px;
+}
+
+.transcript h4 {
+  margin: 0 0 6px 0;
+  font-size: 0.95rem;
+}
+
+.transcript p {
+  margin: 0;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* 1.3.3 */
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid #ddd;
+  padding: 12px;
+  border-radius: 10px;
+  max-width: 620px;
+}
+
+.continue {
+  background: grey;
+  color: #fff;
+  border: 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 800;
+}
+
+/* 1.3.4 orientation */
+.case-wcag-1-3-4-inacc {
+  .wrap {
+    max-width: 620px;
+  }
+  .app {
+    border: 2px solid #0066cc;
+    border-radius: 12px;
+    padding: 12px;
+    background: #e6f2ff;
+  }
+  .warning {
+    display: none;
+    border: 2px solid #cc0000;
+    border-radius: 12px;
+    padding: 12px;
+    background: #fff5f5;
+    margin-bottom: 10px;
+  }
+
+  @media (orientation: landscape) {
+    .app {
+      display: none;
+    }
+    .warning {
+      display: block;
+    }
+  }
+}
+
+.case-wcag-1-3-4-acc {
+  .wrap {
+    max-width: 620px;
+  }
+  .app {
+    border: 2px solid #00aa55;
+    border-radius: 12px;
+    padding: 12px;
+    background: #eafff3;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .tile {
+    border: 1px solid #cfe8d6;
+    border-radius: 10px;
+    padding: 10px;
+    background: #fff;
+  }
+
+  @media (max-width: 520px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+/* 1.4.1 */
+.error-border {
+  border: 2px solid #cc0000;
+}
+
+.error {
+  margin: 8px 0 0 0;
+  color: #b00020;
+  font-weight: 600;
+}
+
+/* 1.4.10 reflow */
+.case-wcag-1-4-10-inacc {
+  .fixed {
+    width: 1000px;
+    border: 2px solid #cc0000;
+    border-radius: 10px;
+    padding: 12px;
+    background: #fff5f5;
+    overflow: auto;
+  }
+  .col {
+    display: inline-block;
+    width: 480px;
+    vertical-align: top;
+    padding: 12px;
+    margin-right: 12px;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid #ddd;
+  }
+}
+
+.case-wcag-1-4-10-acc {
+  .fluid {
+    max-width: 100%;
+    border: 2px solid #00aa55;
+    border-radius: 10px;
+    padding: 12px;
+    background: #eafff3;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .col {
+    flex: 1 1 260px;
+    min-width: 220px;
+    padding: 12px;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid #cfe8d6;
+  }
+}
+
+/* 1.4.11 */
+.panel {
+  padding: 14px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #eee;
+  max-width: 520px;
+}
+
+.btn {
+  background: #ffffff;
+  color: #222;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 800;
+}
+
+.btn.weak {
+  border: 1px solid #e6e6e6;
+}
+
+.btn.strong {
+  border: 2px solid #555;
+}
+
+.btn:focus {
+  outline: 3px solid #0066cc;
+  outline-offset: 3px;
+}
+
+/* 1.4.12 */
+.box {
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.fixed-height {
+  border: 2px solid #cc0000;
+  background: #fff5f5;
+  height: 64px;
+  overflow: hidden;
+}
+
+.box.fluid {
+  border: 2px solid #00aa55;
+  background: #eafff3;
+}
+
+.user-spacing {
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  word-spacing: 0.16em;
+}
+
+/* 1.4.13 tooltip */
+.help {
+  position: relative;
+  display: inline-block;
+}
+
+.trigger {
+  border: 1px solid #999;
+  background: #fff;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-weight: 800;
+}
+
+.tip {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: calc(100% + 8px);
+  width: 280px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #111;
+  color: #fff;
+}
+
+.case-wcag-1-4-13-inacc .help:hover .tip {
+  display: block;
+}
+
+.case-wcag-1-4-13-acc .help:hover .tip,
+.case-wcag-1-4-13-acc .help:focus-within .tip {
+  display: block;
+}
+
+/* 2.1.2 dialog */
+.dialog {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fff;
+  max-width: 520px;
+}
+
+.trap {
+  border: 2px solid #cc0000;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fff5f5;
+  max-width: 520px;
+}
+
+/* 2.2.2 carousel */
+.carousel {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px;
+  max-width: 520px;
+  background: #fff;
+}
+
+.slide {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #f3f3f3;
+}
+
+/* 2.3.1 flash */
+.flash {
+  padding: 12px;
+  border-radius: 10px;
+  animation: wcagFlash 0.1s infinite;
+}
+
+@keyframes wcagFlash {
+  0% {
+    background: #fff;
+  }
+  50% {
+    background: #f00;
+  }
+  100% {
+    background: #fff;
+  }
+}
+
+.safe {
+  padding: 12px;
+  border-radius: 10px;
+  background: #fff;
+  transition: background 0.4s ease;
+  border: 1px solid #ddd;
+}
+
+/* 2.4.7 focus visible */
+.no-outline:focus {
+  outline: none;
+}
+
+.yes-outline:focus {
+  outline: 3px solid #0066cc;
+  outline-offset: 2px;
+}
+
+/* 2.5.x map/toggle */
+.map {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px;
+  max-width: 520px;
+  background: #fff;
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+kbd {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  padding: 2px 6px;
+  border: 1px solid #ddd;
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  background: #f7f7f7;
+}
+
+.wcag-example-note,
+.note {
+  margin-top: 10px;
+  color: #444;
+}
+
+.wcag-example-case {
+  margin-bottom: 10px;
+  color: #555;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+/* 1.3.2 Secuencia significativa */
+.case-wcag-1-3-2-inacc,
+.case-wcag-1-3-2-acc {
+  .layout {
+    display: flex;
+    gap: 10px;
+  }
+
+  .box {
+    border: 1px solid #cfcfcf;
+    border-radius: 6px;
+    padding: 10px;
+    background: #fafafa;
+  }
+
+  .sidebar {
+    flex: 0 0 35%;
+  }
+
+  .main {
+    flex: 1 1 auto;
+  }
+}
+
+.case-wcag-1-3-2-inacc {
+  .sidebar {
+    order: -1;
+  }
+}
+
+/* 1.4.3 Contraste mínimo */
+.case-wcag-1-4-3-inacc .card,
+.case-wcag-1-4-3-acc .card {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e2e2;
+}
+
+.case-wcag-1-4-3-inacc {
+  .card {
+    background: #f7f7f7;
+  }
+
+  .title,
+  .body {
+    color: #bdbdbd;
+  }
+}
+
+.case-wcag-1-4-3-acc {
+  .card {
+    background: #ffffff;
+  }
+
+  .title {
+    color: #1f1f1f;
+  }
+
+  .body {
+    color: #2f2f2f;
+  }
+}
+
+/* 1.4.4 Redimensionamiento de texto */
+.case-wcag-1-4-4-inacc,
+.case-wcag-1-4-4-acc {
+  .box {
+    border: 1px solid #cfcfcf;
+    border-radius: 6px;
+    padding: 10px;
+  }
+}
+
+.case-wcag-1-4-4-inacc {
+  .small {
+    height: 42px;
+    overflow: hidden;
+    font-size: 12px;
+    line-height: 1.2;
+    background: #fafafa;
+  }
+}
+
+.case-wcag-1-4-4-acc {
+  .base {
+    max-width: 40rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    background: #ffffff;
+  }
+}
+
+/* 2.1.1 Teclado */
+.case-wcag-2-1-1-inacc {
+  .fake-click {
+    display: inline-block;
+    padding: 10px 12px;
+    border-radius: 6px;
+    background: #1a73e8;
+    color: #fff;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.18);
+    transition: transform 80ms ease, box-shadow 120ms ease, background 120ms ease;
+  }
+
+  .fake-click:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
+    background: #1557b0;
+  }
+}
+
+.case-wcag-2-1-1-acc {
+  button {
+    padding: 10px 12px;
+    border-radius: 6px;
+  }
+
+  .fake-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    background: #1a73e8;
+    color: #fff;
+    user-select: none;
+  }
+
+  .fake-button:focus {
+    outline: 3px solid #ffbf47;
+    outline-offset: 2px;
+  }
+}
+
+/* 2.4.1 Saltar contenido */
+.case-wcag-2-4-1-acc {
+  position: relative;
+
+  .skip-link {
+    position: absolute;
+    left: -999px;
+    top: 0;
+    padding: 8px 10px;
+    background: #000;
+    color: #fff;
+    border-radius: 4px;
+  }
+
+  .skip-link:focus {
+    left: 8px;
+    top: 8px;
+    z-index: 10;
+  }
+}

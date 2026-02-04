@@ -1,0 +1,57 @@
+<div class="combo-wrapper">
+  <div
+    class="combo"
+    role="combobox"
+    tabindex="0"
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    [class.combo--edit]="isEditMode"
+    (click)="onComboClick($event)"
+    (focus)="onComboFocus($event)"
+    (keydown)="onComboKeydown($event)"
+  >
+    <button
+      type="button"
+      tabindex="-1"
+      class="combo-icon-button combo-icon-left iconOk"
+      aria-label="Activar búsqueda"
+      (mousedown)="$event.preventDefault()"
+      (click)="activateFromIcon($event)"
+    ></button>
+
+    <div class="combo-main">
+      <label class="combo-label" for="search" (click)="activateFromLabel($event)">
+        Busca
+      </label>
+
+      <input
+        #searchInput
+        class="combo-input"
+        id="search"
+        type="text"
+        placeholder="text here..."
+        [value]="searchValue"
+        [readOnly]="!isEditMode"
+        [attr.tabindex]="isEditMode ? 0 : -1"
+        [attr.aria-readonly]="!isEditMode"
+        (input)="onInput($event)"
+        (keydown.escape)="exitEdit()"
+        (blur)="exitEdit()"
+      />
+    </div>
+
+    <ng-container *ngIf="isClickable; else staticRightIcon">
+      <button
+        type="button"
+        class="combo-icon-button combo-icon-right iconX"
+        aria-label="Clear search"
+        (mousedown)="$event.preventDefault()"
+        (click)="clearSearch($event)"
+      ></button>
+    </ng-container>
+
+    <ng-template #staticRightIcon>
+      <span class="combo-icon-right iconX" aria-hidden="true"></span>
+    </ng-template>
+  </div>
+</div>

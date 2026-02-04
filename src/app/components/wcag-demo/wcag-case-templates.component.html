@@ -1,0 +1,1026 @@
+<!-- This component exists only to declare & register WCAG example templates. -->
+
+<!-- 1.1.1 Contenido no textual -->
+<ng-template wcagCaseTemplate="wcag-1-1-1/inaccessible">
+  <div class="wcag-example case-wcag-1-1-1">
+    <img
+      src="https://images.pexels.com/photos/31299766/pexels-photo-31299766.jpeg"
+      width="320"
+      height="213"
+      loading="lazy"
+    />
+    <p class="wcag-example-note">Problema: No existe manera de conocer el contenido de la imagen sin verla.</p>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-1-1-1/accessible">
+  <div class="wcag-example case-wcag-1-1-1">
+    <img
+      src="https://images.pexels.com/photos/31299766/pexels-photo-31299766.jpeg"
+      alt="Flor amarilla con pétalos grandes y redondeados, sobre fondo verde desenfocado."
+      width="320"
+      height="213"
+      loading="lazy"
+    />
+    <p class="wcag-example-note">Usar <strong>alt</strong>: permite describir la imagen.</p>
+  </div>
+</ng-template>
+
+<!-- 1.3.1 Información y relaciones -->
+<ng-template wcagCaseTemplate="wcag-1-3-1/inaccessible" let-idPrefix="idPrefix">
+  <div class="wcag-example wcag-form-demo case-wcag-1-3-1">
+    <div class="wcag-field">
+      <div class="wcag-fake-label">Nombre</div>
+      <input type="text" [attr.id]="idPrefix + '-name'" placeholder="Ej: Ana" />
+    </div>
+
+    <div class="wcag-field">
+      <div class="wcag-fake-label">Correo</div>
+      <input type="email" [attr.id]="idPrefix + '-email'" placeholder="usuario@ejemplo.com" />
+    </div>
+
+    <div class="wcag-subexample">
+      <button type="button" class="wcag-primary" (click)="togglePanel(idPrefix + '-details-panel')">Mostrar detalles</button>
+      <div class="wcag-panel" [attr.id]="idPrefix + '-details-panel'" [hidden]="!isPanelOpen(idPrefix + '-details-panel')">
+        <p class="wcag-panel-title"><strong>Detalles del envío</strong></p>
+      </div>
+        <div class="wcag-example-note">
+         Problema: tecnologias acertivas no pueden relacionar controles con su contenido.
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-1-3-1/accessible" let-idPrefix="idPrefix">
+  <div class="wcag-example wcag-form-demo case-wcag-1-3-1">
+    <div class="wcag-field">
+      <label class="wcag-label" [attr.for]="idPrefix + '-name'">Nombre</label>
+      <input type="text" [attr.id]="idPrefix + '-name'" autocomplete="name" placeholder="Ej: Ana" />
+    </div>
+
+    <div class="wcag-field">
+      <label class="wcag-label">
+        Correo
+        <input type="email" autocomplete="email" placeholder="usuario@ejemplo.com" />
+      </label>
+    </div>
+
+    <div class="wcag-subexample">
+      <button
+        type="button"
+        class="wcag-primary"
+        [attr.id]="idPrefix + '-details-toggle'"
+        [attr.aria-controls]="idPrefix + '-details-panel'"
+        [attr.aria-expanded]="isPanelOpen(idPrefix + '-details-panel')"
+        (click)="togglePanel(idPrefix + '-details-panel')"
+      >
+        Mostrar detalles
+      </button>
+      <div
+        class="wcag-panel"
+        [attr.id]="idPrefix + '-details-panel'"
+        role="region"
+        [attr.aria-labelledby]="idPrefix + '-details-toggle'"
+        [hidden]="!isPanelOpen(idPrefix + '-details-panel')"
+      >
+        <p class="wcag-panel-title"><strong>Detalles del envío</strong></p>
+      </div>
+        <div class="wcag-example-note">
+            <p>
+                Los labels  utilizan <strong>for/id</strong> para vincular etiqueta y control. Tambien es valido anidar el input dentro del label.   
+            </p>
+            <p>
+                Con <strong>aria-controls</strong> se comunica que región controla el boton, y con
+                <strong>aria-expanded</strong> comunica el estado.
+            </p>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- 1.3.2 Secuencia significativa -->
+<ng-template wcagCaseTemplate="wcag-1-3-2/inaccessible">
+  <div class="wcag-example case-wcag-1-3-2-inacc">
+    <!-- DOM: primero MAIN y luego ASIDE, pero visualmente se invierte con CSS order -->
+    <div class="layout">
+      <section class="box main">
+        <strong>Contenido principal</strong>
+      </section>
+      <aside class="box sidebar">
+        <strong>Columna lateral</strong>
+      </aside>
+    </div>
+    <div class="wcag-example-note">
+         Problema: el orden visual no coincide con el orden del HTML usuarios que no pueden ver interpretan que las columnas estan invertidas.
+      </div>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-1-3-2/accessible">
+  <div class="wcag-example case-wcag-1-3-2-acc">
+    <!-- DOM y visual: ASIDE primero y luego MAIN (mismo orden) -->
+    <div class="layout">
+      <aside class="box sidebar">
+        <strong>Columna lateral</strong>
+      </aside>
+      <section class="box main">
+        <strong>Contenido principal</strong>
+      </section>
+    </div>
+    <div class="wcag-example-note">
+        Columna lateral se visualiza primero y luego el contenido principal, coincidiendo con el orden del HTML.
+      </div>  
+    </div>
+</ng-template>
+
+<!-- 1.4.3 Contraste mínimo -->
+<ng-template wcagCaseTemplate="wcag-1-4-3/inaccessible">
+  <div class="wcag-example case-wcag-1-4-3-inacc">
+    <div class="card">
+      <h3 class="title">Confirmación de compra</h3>
+      <p class="body">Tu pedido ha sido procesado. Revisa el número de orden en tu email.</p>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-1-4-3/accessible">
+  <div class="wcag-example case-wcag-1-4-3-acc">
+    <div class="card">
+      <h3 class="title">Confirmación de compra</h3>
+      <p class="body">Tu pedido ha sido procesado. Revisa el número de orden en tu email.</p>
+    </div>
+  </div>
+</ng-template>
+
+<!-- 1.4.4 Redimensionamiento de texto -->
+<ng-template wcagCaseTemplate="wcag-1-4-4/inaccessible">
+  <div class="wcag-example case-wcag-1-4-4-inacc">
+    <div class="box small">
+      Este texto está dentro de un contenedor con altura fija y overflow hidden.
+      Al aumentar zoom/tamaño de fuente se recorta.
+    </div>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-1-4-4/accessible">
+  <div class="wcag-example case-wcag-1-4-4-acc">
+    <div class="box base">
+      Este contenido usa unidades relativas y no depende de alturas fijas.
+      Prueba haciendo zoom al 200% (Ctrl + +) y el texto debería seguir siendo visible.
+    </div>
+  </div>
+</ng-template>
+
+<!-- 2.1.1 Teclado -->
+<ng-template wcagCaseTemplate="wcag-2-1-1/inaccessible">
+  <div class="wcag-example case-wcag-2-1-1-inacc">
+    <div class="fake-click">Hacer click</div>
+    <p class="wcag-example-note">
+      Con mouse se ve el “click” (efecto visual). Con teclado no funciona porque el <strong>div</strong> no recibe foco ni maneja Enter/Espacio.
+    </p>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-2-1-1/accessible" let-idPrefix="idPrefix">
+  <div class="wcag-example case-wcag-2-1-1-acc">
+    <button type="button">Hacer click</button>
+
+    <div class="fake-button" role="button" tabindex="0" [attr.aria-label]="'Botón simulado ' + idPrefix">
+      Hacer click
+    </div>
+    <p class="wcag-example-note">Mejor usar <strong>button</strong>; si no, añadir role/tabindex y soporte teclado.</p>
+  </div>
+</ng-template>
+
+<!-- 2.4.1 Saltar contenido -->
+<ng-template wcagCaseTemplate="wcag-2-4-1/inaccessible">
+  <div class="wcag-example case-wcag-2-4-1-inacc">
+    <header>
+      <nav aria-label="Menú">
+        <a href="#">Enlace 1</a> · <a href="#">Enlace 2</a> · <a href="#">Enlace 3</a>
+      </nav>
+    </header>
+    <main>
+      <p>Contenido principal (sin enlace de salto).</p>
+    </main>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-2-4-1/accessible" let-idPrefix="idPrefix">
+  <div class="wcag-example case-wcag-2-4-1-acc">
+    <header>
+      <a class="skip-link" [attr.href]="'#' + idPrefix + '-main-content'">Saltar al contenido principal</a>
+      <nav aria-label="Menú">
+        <a href="#">Enlace 1</a> · <a href="#">Enlace 2</a> · <a href="#">Enlace 3</a>
+      </nav>
+    </header>
+    <main [attr.id]="idPrefix + '-main-content'">
+      <p>Contenido principal.</p>
+    </main>
+  </div>
+</ng-template>
+
+<!-- 2.4.4 Propósito del enlace -->
+<ng-template wcagCaseTemplate="wcag-2-4-4/inaccessible">
+  <div class="wcag-example case-wcag-2-4-4-inacc">
+    <a href="/articulos/accesibilidad">Leer más</a>
+    <p class="wcag-example-note">Texto genérico: no indica destino.</p>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-2-4-4/accessible">
+  <div class="wcag-example case-wcag-2-4-4-acc">
+    <a href="/articulos/accesibilidad">Leer más sobre accesibilidad web</a>
+    <div style="margin-top: 10px;">
+      <a href="/articulos/accesibilidad" aria-label="Leer más: Guía completa de accesibilidad web">Leer más</a>
+    </div>
+  </div>
+</ng-template>
+
+<!-- 2.4.6 Encabezados y etiquetas -->
+<ng-template wcagCaseTemplate="wcag-2-4-6/inaccessible">
+  <div class="wcag-example case-wcag-2-4-6-inacc">
+    <h1>Título</h1>
+    <h3>Sección importante</h3>
+    <h2>Subsección</h2>
+    <p class="wcag-example-note">Salto de jerarquía: H1 → H3 → H2.</p>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-2-4-6/accessible">
+  <div class="wcag-example case-wcag-2-4-6-acc">
+    <h1>Mi Sitio Web</h1>
+    <h2>Servicios principales</h2>
+    <h3>Servicio 1</h3>
+    <h3>Servicio 2</h3>
+    <h2>Contacto</h2>
+  </div>
+</ng-template>
+
+<!-- 2.5.3 Etiqueta en el nombre -->
+<ng-template wcagCaseTemplate="wcag-2-5-3/inaccessible">
+  <div class="wcag-example wcag-form-demo case-wcag-2-5-3-inacc">
+    <div class="wcag-field">
+      <div class="wcag-fake-label">Email</div>
+      <input type="text" aria-label="Dirección de correo electrónico" placeholder="usuario@ejemplo.com" />
+      <p class="wcag-example-note">El nombre accesible no incluye la etiqueta visible (“Email”).</p>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-2-5-3/accessible" let-idPrefix="idPrefix">
+  <div class="wcag-example wcag-form-demo case-wcag-2-5-3-acc">
+    <div class="wcag-field">
+      <label class="wcag-label" [attr.for]="idPrefix + '-email'">Email</label>
+      <input [attr.id]="idPrefix + '-email'" type="email" autocomplete="email" placeholder="usuario@ejemplo.com" />
+    </div>
+  </div>
+</ng-template>
+
+<!-- 3.3.1 Identificación de errores -->
+<ng-template wcagCaseTemplate="wcag-3-3-1/inaccessible" let-idPrefix="idPrefix">
+  <div class="wcag-example wcag-form-demo case-wcag-3-3-1-inacc">
+    <div class="wcag-field">
+      <input type="email" [attr.id]="idPrefix + '-email'" placeholder="Correo" />
+      <button type="button" class="wcag-primary">Enviar</button>
+      <p class="wcag-example-note">Sin validación ni mensaje de error accesible.</p>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-3-3-1/accessible" let-idPrefix="idPrefix">
+  <div class="wcag-example wcag-form-demo case-wcag-3-3-1-acc">
+    <div class="wcag-field">
+      <label class="wcag-label" [attr.for]="idPrefix + '-email'">Correo:</label>
+      <input
+        type="email"
+        required
+        [attr.id]="idPrefix + '-email'"
+        [attr.aria-describedby]="idPrefix + '-email-error'"
+        aria-invalid="true"
+      />
+      <span
+        class="wcag-error"
+        [attr.id]="idPrefix + '-email-error'"
+        role="alert"
+      >Ingrese un correo válido (ej: usuario@ejemplo.com)</span>
+    </div>
+  </div>
+</ng-template>
+
+<!-- 3.3.2 Etiquetas o instrucciones -->
+<ng-template wcagCaseTemplate="wcag-3-3-2/inaccessible">
+  <div class="wcag-example wcag-form-demo case-wcag-3-3-2-inacc">
+    <input type="text" placeholder="(sin etiqueta)" />
+    <button type="button" class="wcag-primary">Enviar</button>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-3-3-2/accessible" let-idPrefix="idPrefix">
+  <div class="wcag-example wcag-form-demo case-wcag-3-3-2-acc">
+    <label class="wcag-label" [attr.for]="idPrefix + '-search'">Buscar en el sitio:</label>
+    <input [attr.id]="idPrefix + '-search'" type="text" placeholder="Ej: accesibilidad" />
+    <button type="button" class="wcag-primary" aria-label="Buscar">Enviar</button>
+  </div>
+</ng-template>
+
+<!-- 4.1.2 Nombre, rol y valor -->
+<ng-template wcagCaseTemplate="wcag-4-1-2/inaccessible">
+  <div class="wcag-example case-wcag-4-1-2-inacc">
+    <div class="toggle-button">Activar</div>
+    <p class="wcag-example-note">Sin rol/estado: AT no puede interpretar el control.</p>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-4-1-2/accessible" let-idPrefix="idPrefix">
+  <div class="wcag-example case-wcag-4-1-2-acc">
+    <button type="button" [attr.id]="idPrefix + '-toggle'" aria-pressed="false">Activar</button>
+    <p class="wcag-example-note">Usa <strong>button</strong> + <strong>aria-pressed</strong> para exponer estado.</p>
+  </div>
+</ng-template>
+
+<!-- 1.2.1–1.2.3 Alternativas para audio y vídeo (prerregrabado) -->
+<ng-template wcagCaseTemplate="wcag-1-2-1-3/inaccessible">
+  <div class="wcag-example case-wcag-1-2-1-3-inacc">
+    <div class="wcag-subexample wcag-subexample--first">
+      <p class="label">1.2.1 — Solo audio (sin transcripción)</p>
+      <audio controls src="https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3"></audio>
+      <p class="wcag-example-note">Problema: sin transcripción, el contenido no es accesible para personas sordas/hipoacúsicas.</p>
+    </div>
+
+    <div class="wcag-subexample">
+      <p class="label">1.2.2 — Vídeo (sin subtítulos/captions)</p>
+      <video controls>
+        <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
+      </video>
+      <p class="wcag-example-note">Problema: sin subtítulos, el diálogo/sonidos relevantes se pierden.</p>
+    </div>
+
+    <div class="wcag-subexample">
+      <p class="label">1.2.3 — Vídeo con captions (pero sin audiodescripción)</p>
+      <video
+        controls
+        crossorigin="anonymous"
+        (loadedmetadata)="enableDefaultSubtitles($event)"
+        (play)="enableDefaultSubtitles($event)"
+      >
+        <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
+        <track kind="captions" [src]="flowerCaptionsSrc" srclang="es" label="Español" default />
+      </video>
+      <p class="wcag-example-note">Problema: si la información visual aporta significado, captions no sustituyen la audiodescripción.</p>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-1-2-1-3/accessible">
+  <div class="wcag-example case-wcag-1-2-1-3-acc">
+    <div class="wcag-subexample wcag-subexample--first">
+      <p class="label">1.2.1 — Audio + transcripción (prueba)</p>
+      <audio controls src="https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3"></audio>
+      <div class="transcript" role="group" aria-label="Transcripción">
+        <h4>Transcripción</h4>
+        <p>[00:00] Sonido fuerte / rugido (audio de prueba CC0).</p>
+      </div>
+    </div>
+
+    <div class="wcag-subexample">
+      <p class="label">1.2.2 — Vídeo + captions (prueba)</p>
+      <video
+        controls
+        crossorigin="anonymous"
+        (loadedmetadata)="enableDefaultSubtitles($event)"
+        (play)="enableDefaultSubtitles($event)"
+      >
+        <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
+        <track kind="captions" [src]="flowerCaptionsSrc" srclang="es" label="Español" default />
+      </video>
+      <p class="hint">Si no ves los subtítulos, activa “CC” en el reproductor.</p>
+    </div>
+
+    <div class="wcag-subexample">
+      <p class="label">1.2.3 — Audiodescripción o alternativa (prueba)</p>
+      <video
+        controls
+        crossorigin="anonymous"
+        (loadedmetadata)="enableDefaultSubtitles($event)"
+        (play)="enableDefaultSubtitles($event)"
+      >
+        <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
+        <track kind="captions" [src]="flowerCaptionsSrc" srclang="es" label="Español" default />
+        <track
+          kind="descriptions"
+          [src]="flowerDescriptionsSrc"
+          srclang="es"
+          label="Audiodescripción (prueba)"
+        />
+      </video>
+
+      <div class="alt">
+        <strong>Alternativa:</strong>
+        <div>Descripción del vídeo (texto): “Se muestra una flor moviéndose con el viento. Cambia el encuadre”.</div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- 1.3.3 Características sensoriales -->
+<ng-template wcagCaseTemplate="wcag-1-3-3/inaccessible">
+  <div class="wcag-example case-wcag-1-3-3-inacc">
+    <div class="row">
+      <p>Para continuar, pulsa el botón verde de la derecha.</p>
+      <button class="continue" type="button">Continuar</button>
+    </div>
+    <div class="wcag-example-note">
+         Problema: Usuarios con discapacidades sensoriales pueden no percibir el elemento visual correctamente.
+    </div>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-1-3-3/accessible">
+  <div class="wcag-example case-wcag-1-3-3-acc">
+    <div class="row">
+      <p>Para continuar, pulsa el botón “Continuar”.</p>
+      <button class="continue" type="button">Continuar</button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- 1.3.4 Orientación -->
+<ng-template wcagCaseTemplate="wcag-1-3-4/inaccessible">
+  <div class="wcag-example case-wcag-1-3-4-inacc">
+    <div class="wrap">
+      <div class="warning" role="alert">
+        <strong>Bloqueado en horizontal</strong>
+        <p>Gira el dispositivo a vertical para continuar.</p>
+      </div>
+      <div class="app">
+        <strong>App de ejemplo</strong>
+        <p>Este contenido desaparece en horizontal (malo).</p>
+      </div>
+    </div>
+    <div class="wcag-example-note">
+         Problema: Contenido deja de visualizarse si el usuario no puede utilizar la orientación horizontal.
+    </div>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-1-3-4/accessible">
+  <div class="wcag-example case-wcag-1-3-4-acc">
+    <div class="wrap">
+      <div class="app">
+        <h3>Contenido adaptable</h3>
+        <p>Funciona en vertical y horizontal sin bloquear orientación.</p>
+        <div class="grid">
+          <div class="tile">Elemento 1</div>
+          <div class="tile">Elemento 2</div>
+          <div class="tile">Elemento 3</div>
+          <div class="tile">Elemento 4</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- 1.3.5 Proposito del input -->
+<ng-template wcagCaseTemplate="wcag-1-3-5/inaccessible" let-idPrefix="idPrefix">
+  <div class="wcag-example case-wcag-1-3-5-inacc">
+    <div class="wrap">
+      <label [attr.for]="idPrefix + '-contact'">Contacto</label>
+      <input
+        [attr.id]="idPrefix + '-contact'"
+        name="contact"
+        type="text"
+        placeholder="Email o teléfono"
+      />
+    </div>
+ <div class="wcag-example-note">
+         Problema: Se desconoce tipo de dato a ingresar al haber ambiguedad en el label.
+    </div>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-1-3-5/accessible" let-idPrefix="idPrefix">
+  <div class="wcag-example case-wcag-1-3-5-acc">
+    <div class="wrap">
+      <label [attr.for]="idPrefix + '-email'">Correo</label>
+      <input
+        [attr.id]="idPrefix + '-email'"
+        name="email"
+        type="email"
+        autocomplete="email"
+        inputmode="email"
+        placeholder="usuario@ejemplo.com"
+      />
+
+      <div style="margin-top: 10px;">
+        <label [attr.for]="idPrefix + '-email2'">Correo(text)</label>
+        <input
+          [attr.id]="idPrefix + '-email2'"
+          name="email2"
+          type="text"
+          autocomplete="email"
+          inputmode="email"
+          placeholder="usuario@ejemplo.com"
+        />
+      </div>
+        <div style="margin-top: 10px;">
+        <label [attr.for]="idPrefix + '-tel'">Teléfono</label>
+        <input
+          [attr.id]="idPrefix + '-tel'"
+          name="tel"
+          type="number"
+          autocomplete="tel"
+          inputmode="tel"
+          placeholder="+34 600 000 000">
+        </div>
+    </div>
+    <div class="wcag-example-note">
+         Cada campo indica su proposito, autocomplete facilita la entrada de datos.
+    </div>
+  </div>
+</ng-template>
+
+<!-- 1.4.1 Uso del color -->
+<ng-template wcagCaseTemplate="wcag-1-4-1/inaccessible" let-idPrefix="idPrefix">
+  <div class="wcag-example case-wcag-1-4-1-inacc">
+    <div class="wrap">
+      <label [attr.for]="idPrefix + '-code'">Código</label>
+      <input class="error-border" [attr.id]="idPrefix + '-code'" aria-invalid="true" placeholder="Ej: ABC-123" />
+    </div>
+    <div class="wcag-example-note">
+         Problema: Usuarios con discapacidad visual pueden no detectar el error si solo se usa color.
+    </div>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-1-4-1/accessible" let-idPrefix="idPrefix">
+  <div class="wcag-example case-wcag-1-4-1-acc">
+    <div class="wrap">
+      <label [attr.for]="idPrefix + '-code'">Código</label>
+      <input
+        class="error-border"
+        [attr.id]="idPrefix + '-code'"
+        aria-invalid="true"
+        [attr.aria-describedby]="idPrefix + '-code-error'"
+        placeholder="Ej: ABC-123"
+      />
+      <div class="error" [attr.id]="idPrefix + '-code-error'" role="alert">El código es obligatorio.</div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- 1.4.10 Reflow -->
+<ng-template wcagCaseTemplate="wcag-1-4-10/inaccessible">
+  <div class="wcag-example case-wcag-1-4-10-inacc">
+    <div class="fixed">
+      <div class="col"><strong>Columna A</strong><div>Contenido ancho fijo</div></div>
+      <div class="col"><strong>Columna B</strong><div>Contenido ancho fijo</div></div>
+    </div>
+    <p class="hint">En 320px de ancho (o zoom), aparece scroll horizontal.</p>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-1-4-10/accessible">
+  <div class="wcag-example case-wcag-1-4-10-acc">
+    <div class="fluid">
+      <div class="col"><strong>Columna A</strong><div>Se adapta y hace wrap</div></div>
+      <div class="col"><strong>Columna B</strong><div>Se adapta y hace wrap</div></div>
+    </div>
+    <p class="hint">Reduce el ancho o prueba zoom: debería evitarse el scroll horizontal.</p>
+  </div>
+</ng-template>
+
+<!-- 1.4.11 Contraste no textual -->
+<ng-template wcagCaseTemplate="wcag-1-4-11/inaccessible">
+  <div class="wcag-example case-wcag-1-4-11-inacc">
+    <div class="panel">
+      <button class="btn weak" type="button">Botón con borde casi invisible</button>
+      <p class="hint">El borde/forma del control tiene poco contraste.</p>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-1-4-11/accessible">
+  <div class="wcag-example case-wcag-1-4-11-acc">
+    <div class="panel">
+      <button class="btn strong" type="button">Botón con contraste no textual adecuado</button>
+      <p class="hint">Además del texto, el contorno y estados (focus) deben ser perceptibles.</p>
+    </div>
+  </div>
+</ng-template>
+
+<!-- 1.4.12 Espaciado del texto -->
+<ng-template wcagCaseTemplate="wcag-1-4-12/inaccessible">
+  <div class="wcag-example case-wcag-1-4-12-inacc">
+    <div class="wrap">
+      <div class="box fixed-height user-spacing">
+        Texto con espaciado aumentado (simulando preferencias del usuario). En un contenedor con altura fija se recorta.
+      </div>
+      <p class="hint">Problema: altura fija + overflow hidden.</p>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-1-4-12/accessible">
+  <div class="wcag-example case-wcag-1-4-12-acc">
+    <div class="wrap">
+      <div class="box fluid user-spacing">
+        Texto con espaciado aumentado (simulando preferencias del usuario). Sin altura fija, el contenido fluye y sigue legible.
+      </div>
+      <p class="hint">OK: sin recorte, soporta ajustes de espaciado.</p>
+    </div>
+  </div>
+</ng-template>
+
+<!-- 1.4.13 Contenido al pasar el cursor o foco -->
+<ng-template wcagCaseTemplate="wcag-1-4-13/inaccessible" let-idPrefix="idPrefix">
+  <div class="wcag-example case-wcag-1-4-13-inacc">
+    <span class="help">
+      <button type="button" class="trigger">¿Qué es esto?</button>
+      <span class="tip">Ayuda (solo hover: con teclado no aparece).</span>
+    </span>
+    <p class="hint">Problema: el tooltip no aparece al foco de teclado.</p>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-1-4-13/accessible" let-idPrefix="idPrefix">
+  <div class="wcag-example case-wcag-1-4-13-acc">
+    <span class="help">
+      <button type="button" class="trigger" [attr.aria-describedby]="idPrefix + '-tip'">¿Qué es esto?</button>
+      <span [attr.id]="idPrefix + '-tip'" class="tip" role="tooltip">Ayuda visible en hover y en foco (teclado).</span>
+    </span>
+  </div>
+</ng-template>
+
+<!-- 2.1.2 Sin trampas de teclado -->
+<ng-template wcagCaseTemplate="wcag-2-1-2/inaccessible">
+  <div class="wcag-example case-wcag-2-1-2-inacc">
+    <div class="trap" tabindex="0">Modal que bloquea todas las teclas: no puedes salir</div>
+    <p class="hint">Ejemplo conceptual: no debe bloquear Tab/Escape sin salida.</p>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-2-1-2/accessible" let-idPrefix="idPrefix">
+  <div class="wcag-example case-wcag-2-1-2-acc">
+    <div role="dialog" aria-modal="true" [attr.aria-labelledby]="idPrefix + '-dlg-title'" class="dialog">
+      <h2 [attr.id]="idPrefix + '-dlg-title'">Preferencias</h2>
+      <p>Contenido del modal…</p>
+      <button type="button" aria-label="Cerrar">Cerrar</button>
+      <p class="hint">Buenas prácticas: botón de cierre + soporte Escape + gestión de foco.</p>
+    </div>
+  </div>
+</ng-template>
+
+<!-- 2.1.4 Atajos de teclado (tecla única) -->
+<ng-template wcagCaseTemplate="wcag-2-1-4/inaccessible">
+  <div class="wcag-example case-wcag-2-1-4-inacc">
+    <p>Atajo de una tecla: pulsar <kbd>s</kbd> guarda incluso mientras escribes.</p>
+    <p class="hint">Problema: activaciones accidentales e interferencia con inputs/AT.</p>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-2-1-4/accessible">
+  <div class="wcag-example case-wcag-2-1-4-acc">
+    <p>Atajo con modificador: <kbd>Ctrl</kbd> + <kbd>S</kbd> (y deshabilitable).</p>
+    <button type="button" aria-pressed="false">Atajos: ON</button>
+  </div>
+</ng-template>
+
+<!-- 2.2.1 Tiempo ajustable -->
+<ng-template wcagCaseTemplate="wcag-2-2-1/inaccessible">
+  <div class="wcag-example case-wcag-2-2-1-inacc">
+    <p>Tu sesión se cerrará automáticamente.</p>
+    <p class="hint">Sin aviso adecuado ni opción de extender.</p>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-2-2-1/accessible">
+  <div class="wcag-example case-wcag-2-2-1-acc">
+    <div aria-live="polite" class="status">Tu sesión expirará en 60 segundos.</div>
+    <button type="button">Extender sesión</button>
+    <button type="button">Cerrar sesión ahora</button>
+  </div>
+</ng-template>
+
+<!-- 2.2.2 Pausar, detener, ocultar -->
+<ng-template wcagCaseTemplate="wcag-2-2-2/inaccessible">
+  <div class="wcag-example case-wcag-2-2-2-inacc">
+    <div class="carousel" aria-label="Promociones">
+      <div class="slide">Slide 1</div>
+      <div class="slide">Slide 2</div>
+    </div>
+    <p class="hint">Rotación automática sin controles.</p>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-2-2-2/accessible" let-idPrefix="idPrefix">
+  <div class="wcag-example case-wcag-2-2-2-acc">
+    <div class="carousel" [attr.id]="idPrefix + '-promo'" aria-label="Promociones">
+      <button type="button" [attr.aria-controls]="idPrefix + '-promo'" aria-pressed="false">Pausar</button>
+      <div class="slide">Slide 1</div>
+      <div class="slide">Slide 2</div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- 2.3.1 Convulsiones y reacciones físicas (flashes) -->
+<ng-template wcagCaseTemplate="wcag-2-3-1/inaccessible">
+  <div class="wcag-example case-wcag-2-3-1-inacc">
+    <div class="flash">Banner parpadeante</div>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-2-3-1/accessible">
+  <div class="wcag-example case-wcag-2-3-1-acc">
+    <div class="safe">Banner sin parpadeos rápidos</div>
+  </div>
+</ng-template>
+
+<!-- 2.4.2 Página titulada -->
+<ng-template wcagCaseTemplate="wcag-2-4-2/inaccessible">
+  <div class="wcag-example case-wcag-2-4-2-inacc">
+    <pre class="code"><code>&lt;head&gt;\n  &lt;title&gt;&lt;/title&gt;\n&lt;/head&gt;</code></pre>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-2-4-2/accessible">
+  <div class="wcag-example case-wcag-2-4-2-acc">
+    <pre class="code"><code>&lt;head&gt;\n  &lt;title&gt;Demo WCAG 2.1 - Accesibilidad Web&lt;/title&gt;\n&lt;/head&gt;</code></pre>
+  </div>
+</ng-template>
+
+<!-- 2.4.3 Orden del foco -->
+<ng-template wcagCaseTemplate="wcag-2-4-3/inaccessible">
+  <div class="wcag-example case-wcag-2-4-3-inacc">
+    <a href="#" tabindex="3">Tercero</a>
+    <button type="button" tabindex="1">Primero</button>
+    <input tabindex="2" placeholder="Segundo" />
+    <p class="hint">tabindex positivo altera el orden natural.</p>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-2-4-3/accessible">
+  <div class="wcag-example case-wcag-2-4-3-acc">
+    <button type="button">Primero</button>
+    <input placeholder="Segundo" />
+    <a href="#">Tercero</a>
+  </div>
+</ng-template>
+
+<!-- 2.4.5 Múltiples vías de navegación -->
+<ng-template wcagCaseTemplate="wcag-2-4-5/inaccessible">
+  <div class="wcag-example case-wcag-2-4-5-inacc">
+    <p>Solo puedes encontrar páginas usando la búsqueda.</p>
+    <input type="search" aria-label="Buscar" />
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-2-4-5/accessible">
+  <div class="wcag-example case-wcag-2-4-5-acc">
+    <nav aria-label="Navegación principal">
+      <a href="/productos">Productos</a>
+      <a href="/precios">Precios</a>
+      <a href="/contacto">Contacto</a>
+    </nav>
+    <p><a href="/mapa-del-sitio">Mapa del sitio</a></p>
+    <input type="search" aria-label="Buscar" />
+  </div>
+</ng-template>
+
+<!-- 2.4.7 Enfoque visible -->
+<ng-template wcagCaseTemplate="wcag-2-4-7/inaccessible">
+  <div class="wcag-example case-wcag-2-4-7-inacc">
+    <button type="button" class="no-outline">Guardar</button>
+    <p class="hint">outline eliminado sin reemplazo.</p>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-2-4-7/accessible">
+  <div class="wcag-example case-wcag-2-4-7-acc">
+    <button type="button" class="yes-outline">Guardar</button>
+  </div>
+</ng-template>
+
+<!-- 2.5.1 Gestos con puntero -->
+<ng-template wcagCaseTemplate="wcag-2-5-1/inaccessible">
+  <div class="wcag-example case-wcag-2-5-1-inacc">
+    <div class="map" aria-label="Mapa">Arrastra con el dedo para moverte</div>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-2-5-1/accessible">
+  <div class="wcag-example case-wcag-2-5-1-acc">
+    <div class="map" aria-label="Mapa">
+      <button type="button" aria-label="Mover arriba">↑</button>
+      <button type="button" aria-label="Mover abajo">↓</button>
+      <button type="button" aria-label="Mover izquierda">←</button>
+      <button type="button" aria-label="Mover derecha">→</button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- 2.5.2 Cancelación del puntero -->
+<ng-template wcagCaseTemplate="wcag-2-5-2/inaccessible">
+  <div class="wcag-example case-wcag-2-5-2-inacc">
+    <button type="button">Eliminar</button>
+    <p class="hint">Problema típico: acción al “down” sin cancelar (conceptual).</p>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-2-5-2/accessible">
+  <div class="wcag-example case-wcag-2-5-2-acc">
+    <button type="button">Eliminar</button>
+    <p class="hint">Mejor: confirmar y activar en click (up) para permitir cancelar.</p>
+  </div>
+</ng-template>
+
+<!-- 2.5.4 Activación por movimiento -->
+<ng-template wcagCaseTemplate="wcag-2-5-4/inaccessible">
+  <div class="wcag-example case-wcag-2-5-4-inacc">
+    <p>Agitar el dispositivo ejecuta “deshacer” sin alternativa.</p>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-2-5-4/accessible">
+  <div class="wcag-example case-wcag-2-5-4-acc">
+    <button type="button">Deshacer</button>
+    <label class="toggle">
+      <input type="checkbox" checked />
+      Activar acciones por movimiento
+    </label>
+  </div>
+</ng-template>
+
+<!-- 3.1.1 Idioma de la página -->
+<ng-template wcagCaseTemplate="wcag-3-1-1/inaccessible">
+  <div class="wcag-example case-wcag-3-1-1-inacc">
+    <pre class="code"><code>&lt;html&gt;...&lt;/html&gt;</code></pre>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-3-1-1/accessible">
+  <div class="wcag-example case-wcag-3-1-1-acc">
+    <pre class="code"><code>&lt;html lang=&quot;es&quot;&gt;...&lt;/html&gt;</code></pre>
+  </div>
+</ng-template>
+
+<!-- 3.1.2 Idioma de partes -->
+<ng-template wcagCaseTemplate="wcag-3-1-2/inaccessible">
+  <div class="wcag-example case-wcag-3-1-2-inacc">
+    <p>El mensaje dice: Welcome to our site.</p>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-3-1-2/accessible">
+  <div class="wcag-example case-wcag-3-1-2-acc">
+    <p>El mensaje dice: <span lang="en">Welcome to our site</span>.</p>
+  </div>
+</ng-template>
+
+<!-- 3.2.1 Al recibir foco -->
+<ng-template wcagCaseTemplate="wcag-3-2-1/inaccessible">
+  <div class="wcag-example case-wcag-3-2-1-inacc">
+    <pre class="code"><code>&lt;input onfocus=&quot;location.href='/checkout'&quot; placeholder=&quot;Cupones&quot;&gt;</code></pre>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-3-2-1/accessible" let-idPrefix="idPrefix">
+  <div class="wcag-example case-wcag-3-2-1-acc">
+    <label class="wcag-label" [attr.for]="idPrefix + '-coupon'">Cupón</label>
+    <input [attr.id]="idPrefix + '-coupon'" placeholder="Ej: DESCUENTO10" />
+    <button type="button" class="wcag-primary">Aplicar</button>
+  </div>
+</ng-template>
+
+<!-- 3.2.2 Al ingresar datos -->
+<ng-template wcagCaseTemplate="wcag-3-2-2/inaccessible">
+  <div class="wcag-example case-wcag-3-2-2-inacc">
+    <pre class="code"><code>&lt;select onchange=&quot;location.href=this.value&quot;&gt;...&lt;/select&gt;</code></pre>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-3-2-2/accessible" let-idPrefix="idPrefix">
+  <div class="wcag-example case-wcag-3-2-2-acc">
+    <label class="wcag-label" [attr.for]="idPrefix + '-lang'">Idioma</label>
+    <select [attr.id]="idPrefix + '-lang'">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+    </select>
+    <button type="button" class="wcag-primary">Cambiar idioma</button>
+  </div>
+</ng-template>
+
+<!-- 3.2.3 Navegación consistente -->
+<ng-template wcagCaseTemplate="wcag-3-2-3/inaccessible">
+  <div class="wcag-example case-wcag-3-2-3-inacc">
+    <div class="nav-sample">
+      <strong>Página A</strong>
+      <nav>
+        <a href="/inicio">Inicio</a>
+        <a href="/productos">Productos</a>
+        <a href="/contacto">Contacto</a>
+      </nav>
+    </div>
+    <div class="nav-sample" style="margin-top: 10px;">
+      <strong>Página B</strong>
+      <nav>
+        <a href="/productos">Productos</a>
+        <a href="/inicio">Inicio</a>
+      </nav>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-3-2-3/accessible">
+  <div class="wcag-example case-wcag-3-2-3-acc">
+    <nav>
+      <a href="/inicio">Inicio</a>
+      <a href="/productos">Productos</a>
+      <a href="/contacto">Contacto</a>
+    </nav>
+  </div>
+</ng-template>
+
+<!-- 3.2.4 Identificación consistente -->
+<ng-template wcagCaseTemplate="wcag-3-2-4/inaccessible">
+  <div class="wcag-example case-wcag-3-2-4-inacc">
+    <button type="button" aria-label="Buscar">🔎</button>
+    <button type="button" aria-label="Ir" style="margin-left: 8px;">🔎</button>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-3-2-4/accessible">
+  <div class="wcag-example case-wcag-3-2-4-acc">
+    <button type="button" aria-label="Buscar">🔎</button>
+    <button type="button" aria-label="Buscar" style="margin-left: 8px;">🔎</button>
+  </div>
+</ng-template>
+
+<!-- 3.3.3 Sugerencias ante errores -->
+<ng-template wcagCaseTemplate="wcag-3-3-3/inaccessible" let-idPrefix="idPrefix">
+  <div class="wcag-example wcag-form-demo case-wcag-3-3-3-inacc">
+    <label class="wcag-label" [attr.for]="idPrefix + '-pwd'">Contraseña</label>
+    <input [attr.id]="idPrefix + '-pwd'" type="password" aria-invalid="true" />
+    <div class="wcag-error" role="alert">Contraseña inválida</div>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-3-3-3/accessible" let-idPrefix="idPrefix">
+  <div class="wcag-example wcag-form-demo case-wcag-3-3-3-acc">
+    <label class="wcag-label" [attr.for]="idPrefix + '-pwd'">Contraseña</label>
+    <input
+      [attr.id]="idPrefix + '-pwd'"
+      type="password"
+      aria-invalid="true"
+      [attr.aria-describedby]="idPrefix + '-pwd-help ' + idPrefix + '-pwd-error'"
+    />
+    <div [attr.id]="idPrefix + '-pwd-help'">Debe tener 8+ caracteres, 1 número y 1 mayúscula.</div>
+    <div [attr.id]="idPrefix + '-pwd-error'" class="wcag-error" role="alert">Falta al menos un número.</div>
+  </div>
+</ng-template>
+
+<!-- 3.3.4 Prevención de errores -->
+<ng-template wcagCaseTemplate="wcag-3-3-4/inaccessible">
+  <div class="wcag-example case-wcag-3-3-4-inacc">
+    <button type="button" class="wcag-primary">Confirmar compra</button>
+    <p class="hint">Sin revisión ni confirmación.</p>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-3-3-4/accessible" let-idPrefix="idPrefix">
+  <div class="wcag-example case-wcag-3-3-4-acc">
+    <h3>Revisar pedido</h3>
+    <p>Total: $150</p>
+    <button type="button">Editar datos</button>
+    <button type="button" class="wcag-primary">Confirmar compra</button>
+    <p [attr.id]="idPrefix + '-confirm-help'" class="hint">Revisa tu pedido antes de confirmar.</p>
+  </div>
+</ng-template>
+
+<!-- 4.1.1 Análisis (HTML bien formado) -->
+<ng-template wcagCaseTemplate="wcag-4-1-1/inaccessible">
+  <div class="wcag-example case-wcag-4-1-1-inacc">
+    <pre class="code"><code>&lt;button id=&quot;buy&quot;&gt;Comprar &lt;span&gt;ahora&lt;/button&gt;\n&lt;div id=&quot;buy&quot;&gt;Duplicado&lt;/div&gt;</code></pre>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-4-1-1/accessible">
+  <div class="wcag-example case-wcag-4-1-1-acc">
+    <pre class="code"><code>&lt;button id=&quot;buy&quot;&gt;Comprar &lt;span&gt;ahora&lt;/span&gt;&lt;/button&gt;\n&lt;div id=&quot;buy-summary&quot;&gt;Resumen&lt;/div&gt;</code></pre>
+  </div>
+</ng-template>
+
+<!-- 4.1.3 Mensajes de estado -->
+<ng-template wcagCaseTemplate="wcag-4-1-3/inaccessible">
+  <div class="wcag-example case-wcag-4-1-3-inacc">
+    <button type="button" class="wcag-primary">Agregar</button>
+    <div class="hint">Agregado al carrito (no anunciado).</div>
+  </div>
+</ng-template>
+
+<ng-template wcagCaseTemplate="wcag-4-1-3/accessible" let-idPrefix="idPrefix">
+  <div class="wcag-example case-wcag-4-1-3-acc">
+    <button type="button" class="wcag-primary">Agregar</button>
+    <div [attr.id]="idPrefix + '-status'" role="status" aria-live="polite">Listo.</div>
+  </div>
+</ng-template>

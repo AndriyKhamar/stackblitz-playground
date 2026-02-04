@@ -7,20 +7,7 @@
     </p>
   </header>
 
-  <div class="layout-actions" aria-label="Opciones de diseño">
-    <button
-      type="button"
-      class="sidebar-toggle"
-      (click)="toggleSidebar()"
-      [attr.aria-expanded]="!isSidebarCollapsed"
-      [attr.aria-label]="isSidebarCollapsed ? 'Mostrar información adicional' : 'Ocultar información adicional'"
-      aria-controls="wcag-sidebar"
-    >
-      <span class="sidebar-toggle-icon" aria-hidden="true">{{ isSidebarCollapsed ? '<' : '>' }}</span>
-    </button>
-  </div>
-
-  <main class="wcag-main" [class.sidebar-collapsed]="isSidebarCollapsed">
+  <main class="wcag-main">
     <div class="cases-list">
       <section
         *ngFor="let group of wcagCaseGroups; trackBy: trackByPillar"
@@ -42,7 +29,10 @@
               [attr.aria-controls]="'case-content-' + wcagCase.id"
             >
               <span class="criterion-badge">{{ wcagCase.criterion }}</span>
-              <span class="case-title">{{ wcagCase.name }}</span>
+              <span class="case-title">
+                <span class="important-icon" *ngIf="wcagCase.important" >⚠️</span>
+                {{ wcagCase.name }}
+              </span>
               <span class="toggle-icon" aria-hidden="true">
                 {{ isExpanded(wcagCase.id) ? '▼' : '▶' }}
               </span>
@@ -58,82 +48,52 @@
                 <p>{{ wcagCase.description }}</p>
               </div>
 
-              <div class="preview-actions" aria-label="Acciones de vista previa">
-                <button
-                  type="button"
-                  class="preview-toggle"
-                  (click)="toggleHtml(wcagCase.id)"
-                  [attr.aria-pressed]="isHtmlShown(wcagCase.id)"
-                >
-                  {{ isHtmlShown(wcagCase.id) ? 'Ocultar HTML' : 'Mostrar HTML' }}
-                </button>
-              </div>
-
               <div class="preview-section">
-                <h3 class="preview-title">Vista previa (HTML renderizado)</h3>
-                <p class="preview-hint">
-                  Nota: se renderiza en un <strong>iframe</strong> con <strong>sandbox</strong> (aislado). Puedes inspeccionarlo con
-                  DevTools.
-                </p>
+                <h3 class="preview-title">Vista previa</h3>
+                <!-- <p class="preview-hint">
+                  Nota: estos ejemplos se renderizan como <strong>ng-template</strong> directamente en el DOM.
+                </p> -->
 
                 <div class="preview-grid" [class.single-column]="!isSolutionRevealed(wcagCase.id)">
                   <div class="preview-block inaccessible">
-                    <h4>❌ No Accesible (render)</h4>
-                    <iframe
-                      class="preview-frame"
-                      title="Vista previa: no accesible"
-                      sandbox
-                      [srcdoc]="trustedSrcDoc(buildPreviewSrcDoc(getInaccessibleHtml(wcagCase)))"
-                    ></iframe>
+                    <h4>❌ No Accesible</h4>
+                    <ng-container *ngIf="hasCaseTemplate(wcagCase.inaccessibleTemplateKey); else missingTemplate">
+                      <div class="template-preview" role="group" aria-label="Vista previa template: no accesible">
+                        <ng-container
+                          *ngTemplateOutlet="getCaseTemplate(wcagCase.inaccessibleTemplateKey); context: templateContext(wcagCase, 'inaccessible')"
+                        ></ng-container>
+                      </div>
+                    </ng-container>
                   </div>
 
                   <div class="preview-block accessible" *ngIf="isSolutionRevealed(wcagCase.id)">
-                    <h4>✅ Accesible (render)</h4>
-                    <iframe
-                      class="preview-frame"
-                      title="Vista previa: accesible"
-                      sandbox
-                      [srcdoc]="trustedSrcDoc(buildPreviewSrcDoc(getAccessibleHtml(wcagCase)))"
-                    ></iframe>
+                    <h4>✅ Accesible</h4>
+                    <ng-container *ngIf="hasCaseTemplate(wcagCase.accessibleTemplateKey); else missingTemplate">
+                      <div class="template-preview" role="group" aria-label="Vista previa template: accesible">
+                        <ng-container
+                          *ngTemplateOutlet="getCaseTemplate(wcagCase.accessibleTemplateKey); context: templateContext(wcagCase, 'accessible')"
+                        ></ng-container>
+                      </div>
+                    </ng-container>
                   </div>
-                </div>
-              </div>
-
-              <div
-                class="code-comparison"
-                [class.single-column]="!isSolutionRevealed(wcagCase.id)"
-                *ngIf="isHtmlShown(wcagCase.id)"
-              >
-                <div class="code-block inaccessible">
-                  <div class="code-header">
-                    <h4>❌ No Accesible (editable)</h4>
-                    <button type="button" class="code-reset" (click)="resetInaccessibleHtml(wcagCase)">Restablecer</button>
-                  </div>
-                  <textarea
-                    class="code-editor"
-                    spellcheck="false"
-                    [value]="getInaccessibleHtml(wcagCase)"
-                    (input)="updateInaccessibleHtml(wcagCase.id, $any($event.target).value)"
-                    aria-label="HTML no accesible (editable)"
-                  ></textarea>
                 </div>
 
-                <div class="code-block accessible" *ngIf="isSolutionRevealed(wcagCase.id)">
-                  <div class="code-header">
-                    <h4>✅ Accesible (editable)</h4>
-                    <button type="button" class="code-reset" (click)="resetAccessibleHtml(wcagCase)">Restablecer</button>
+                <ng-template #missingTemplate>
+                  <div class="template-preview" role="note">
+                    Falta el template para este caso.
                   </div>
-                  <textarea
-                    class="code-editor"
-                    spellcheck="false"
-                    [value]="getAccessibleHtml(wcagCase)"
-                    (input)="updateAccessibleHtml(wcagCase.id, $any($event.target).value)"
-                    aria-label="HTML accesible (editable)"
-                  ></textarea>
-                </div>
+                </ng-template>
               </div>
 
               <div class="solution-actions" aria-label="Acciones de solución">
+                <button
+                  type="button"
+                  class="code-toggle"
+                  (click)="toggleCode(wcagCase.id)"
+                  [attr.aria-pressed]="isCodeRevealed(wcagCase.id)"
+                >
+                  {{ isCodeRevealed(wcagCase.id) ? 'Ocultar código' : 'Ver código' }}
+                </button>
                 <button
                   type="button"
                   class="solution-toggle"
@@ -142,6 +102,23 @@
                 >
                   {{ isSolutionRevealed(wcagCase.id) ? 'Ocultar solución' : 'Mostrar solución' }}
                 </button>
+              </div>
+
+              <div class="code-section" *ngIf="isCodeRevealed(wcagCase.id)" aria-label="Código fuente del ejemplo">
+                <h3 class="code-title">Código (fuente)</h3>
+                <p class="code-hint">Se muestra el marcado del template (puede incluir bindings tipo <strong>[attr.id]</strong>).</p>
+
+                <div class="code-grid" [class.single-column]="!isSolutionRevealed(wcagCase.id)">
+                  <div class="code-block inaccessible">
+                    <h4>❌ No Accesible (código)</h4>
+                    <pre><code [textContent]="getTemplateCode(wcagCase.inaccessibleTemplateKey)"></code></pre>
+                  </div>
+
+                  <div class="code-block accessible" *ngIf="isSolutionRevealed(wcagCase.id)">
+                    <h4>✅ Accesible (código)</h4>
+                    <pre><code [textContent]="getTemplateCode(wcagCase.accessibleTemplateKey)"></code></pre>
+                  </div>
+                </div>
               </div>
 
               <div class="case-explanation">
@@ -153,39 +130,41 @@
         </div>
       </section>
     </div>
-
-    <aside
-      *ngIf="!isSidebarCollapsed"
-      id="wcag-sidebar"
-      class="wcag-sidebar"
-      role="complementary"
-      aria-label="Información adicional"
-    >
-      <h2>Niveles WCAG</h2>
-      <dl>
-        <dt><strong>A</strong></dt>
-        <dd>Nivel básico de conformidad.</dd>
-
-        <dt><strong>AA</strong></dt>
-        <dd>Recomendado. Mejora accesibilidad para la mayoría.</dd>
-
-        <dt><strong>AAA</strong></dt>
-        <dd>Máximo nivel. Accesibilidad óptima.</dd>
-      </dl>
-
-      <h2>Recursos</h2>
-      <ul>
-        <li>
-          <a href="https://www.w3.org/TR/WCAG21/" target="_blank" rel="noopener noreferrer">
-            WCAG 2.1 oficial
-          </a>
-        </li>
-        <li>
-          <a href="https://www.w3.org/WAI/" target="_blank" rel="noopener noreferrer">
-            Web Accessibility Initiative (WAI)
-          </a>
-        </li>
-      </ul>
-    </aside>
   </main>
+
+  <footer class="wcag-footer-info" aria-label="Información adicional">
+    <h2>Niveles WCAG</h2>
+    <dl>
+      <dt><strong>A</strong></dt>
+      <dd>Nivel básico de conformidad.</dd>
+
+      <dt><strong>AA</strong></dt>
+      <dd>Recomendado. Mejora accesibilidad para la mayoría.</dd>
+
+      <dt><strong>AAA</strong></dt>
+      <dd>Máximo nivel. Accesibilidad óptima.</dd>
+    </dl>
+
+    <h2>Recursos</h2>
+    <ul>
+      <li>
+        <a href="https://www.w3.org/TR/WCAG21/" target="_blank" rel="noopener noreferrer">
+          WCAG 2.1 oficial
+        </a>
+      </li>
+      <li>
+        <a href="https://www.w3.org/WAI/" target="_blank" rel="noopener noreferrer">
+          Web Accessibility Initiative (WAI)
+        </a>
+      </li>
+      <li>
+        <a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility" target="_blank" rel="noopener noreferrer">
+          MDN Web Accessibility
+        </a>
+      </li>
+    </ul>
+  </footer>
 </div>
+
+<!-- Hosts all example templates (ng-template does not render). -->
+<wcag-case-templates></wcag-case-templates>

@@ -5,8 +5,9 @@ export interface WCAGCase {
   criterion: string;
   pillar: A11yPillarKey;
   name: string;
+  important: boolean;
   description: string;
-  inaccessibleExample: string;
-  accessibleExample: string;
+  inaccessibleTemplateKey?: string;
+  accessibleTemplateKey?: string;
   explanation: string;
 }

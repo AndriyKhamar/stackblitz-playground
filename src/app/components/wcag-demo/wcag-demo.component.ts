@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Component, TemplateRef } from '@angular/core';
 
 import { A11yPillarKey, WCAGCase } from './wcag-case.model';
 import { WCAG_CASES } from './wcag-cases.data';
+import { WCAG_TEMPLATE_CODE } from './wcag-case-code.data';
+import { WcagCaseTemplateRegistryService } from './wcag-case-template-registry.service';
 
 interface WCAGCaseGroup {
   pillar: A11yPillarKey;
@@ -27,31 +28,49 @@ export class WCAGDemoComponent {
 
   expandedCases: Set<string> = new Set();
   revealedSolutions: Set<string> = new Set();
-  showHtmlCases: Set<string> = new Set();
+  revealedCode: Set<string> = new Set();
 
-  isSidebarCollapsed: boolean = false;
-
-  editedInaccessibleHtml: { [caseId: string]: string } = {};
-  editedAccessibleHtml: { [caseId: string]: string } = {};
-
-  constructor(private sanitizer: DomSanitizer) {
+  constructor(
+    private templateRegistry: WcagCaseTemplateRegistryService
+  ) {
     this.wcagCaseGroups = this.buildCaseGroups(WCAG_CASES);
   }
 
-  trustedSrcDoc(srcDocHtml: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(srcDocHtml || '');
+  getCaseTemplate(key?: string): TemplateRef<unknown> | null {
+    return this.templateRegistry.get(key);
   }
 
-  toggleSidebar(): void {
-    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+  hasCaseTemplate(key?: string): boolean {
+    return this.templateRegistry.has(key);
+  }
+
+  getTemplateCode(key?: string): string {
+    if (!key) return '';
+    return WCAG_TEMPLATE_CODE[key] || '';
+  }
+
+  templateContext(wcagCase: WCAGCase, variant: 'inaccessible' | 'accessible'): {
+    idPrefix: string;
+    caseId: string;
+    variant: 'inaccessible' | 'accessible';
+  } {
+    return {
+      idPrefix: wcagCase.id + '-' + variant,
+      caseId: wcagCase.id,
+      variant: variant,
+    };
   }
 
   toggleCase(caseId: string): void {
     if (this.expandedCases.has(caseId)) {
       this.expandedCases.delete(caseId);
       this.revealedSolutions.delete(caseId);
-      this.showHtmlCases.delete(caseId);
+      this.revealedCode.delete(caseId);
     } else {
+      // Accordion behavior: only one case expanded at a time.
+      this.expandedCases.clear();
+      this.revealedSolutions.clear();
+      this.revealedCode.clear();
       this.expandedCases.add(caseId);
     }
   }
@@ -72,80 +91,16 @@ export class WCAGDemoComponent {
     return this.revealedSolutions.has(caseId);
   }
 
-  toggleHtml(caseId: string): void {
-    if (this.showHtmlCases.has(caseId)) {
-      this.showHtmlCases.delete(caseId);
+  toggleCode(caseId: string): void {
+    if (this.revealedCode.has(caseId)) {
+      this.revealedCode.delete(caseId);
     } else {
-      this.showHtmlCases.add(caseId);
+      this.revealedCode.add(caseId);
     }
   }
 
-  isHtmlShown(caseId: string): boolean {
-    return this.showHtmlCases.has(caseId);
-  }
-
-  getInaccessibleHtml(wcagCase: WCAGCase): string {
-    const current = this.editedInaccessibleHtml[wcagCase.id];
-    return current === undefined ? wcagCase.inaccessibleExample : current;
-  }
-
-  updateInaccessibleHtml(caseId: string, value: string): void {
-    this.editedInaccessibleHtml[caseId] = value;
-  }
-
-  resetInaccessibleHtml(wcagCase: WCAGCase): void {
-    this.editedInaccessibleHtml[wcagCase.id] = wcagCase.inaccessibleExample;
-  }
-
-  getAccessibleHtml(wcagCase: WCAGCase): string {
-    const current = this.editedAccessibleHtml[wcagCase.id];
-    return current === undefined ? wcagCase.accessibleExample : current;
-  }
-
-  updateAccessibleHtml(caseId: string, value: string): void {
-    this.editedAccessibleHtml[caseId] = value;
-  }
-
-  resetAccessibleHtml(wcagCase: WCAGCase): void {
-    this.editedAccessibleHtml[wcagCase.id] = wcagCase.accessibleExample;
-  }
-
-  buildPreviewSrcDoc(snippetHtml: string): string {
-    const trimmed = (snippetHtml || '').trim();
-
-    // If the snippet already looks like a full HTML document, render it as-is.
-    if (
-      /^<!doctype\s+html/i.test(trimmed) ||
-      /<html[\s>]/i.test(trimmed) ||
-      /<head[\s>]/i.test(trimmed)
-    ) {
-      return trimmed;
-    }
-
-    // Otherwise, wrap it in a minimal document so it renders predictably.
-    // Move any <style> blocks from the snippet into <head> so they apply reliably.
-    const styleRegex = /<style[^>]*>[\s\S]*?<\/style>/gi;
-    const extractedStyles = trimmed.match(styleRegex) || [];
-    const bodyHtml = trimmed.replace(styleRegex, '').trim();
-
-    return `<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-      :root { color-scheme: light; }
-      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 12px; }
-      * { box-sizing: border-box; }
-      button, input, select, textarea { font: inherit; }
-      .preview-surface { padding: 8px; border: 1px dashed #bbb; border-radius: 6px; background: #fff; }
-    </style>
-    ${extractedStyles.join('\n')}
-  </head>
-  <body>
-    <div class="preview-surface">${bodyHtml}</div>
-  </body>
-</html>`;
+  isCodeRevealed(caseId: string): boolean {
+    return this.revealedCode.has(caseId);
   }
 
   private buildCaseGroups(cases: WCAGCase[]): WCAGCaseGroup[] {
