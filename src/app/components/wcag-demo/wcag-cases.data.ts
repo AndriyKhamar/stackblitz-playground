@@ -44,7 +44,7 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
   },
   {
     id: 'wcag-1-4-3',
-    criterion: '1.4.3', //TODO: quitar referencias de AAA
+    criterion: '1.4.3',
     pillar: 'perceptible',
     name: 'Contraste mínimo',
     important: true,
@@ -202,7 +202,7 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
   },
   {
     id: 'wcag-1-4-10',
-    criterion: '1.4.10', //TODO: quitar width fijo
+    criterion: '1.4.10',
     pillar: 'perceptible',
     name: 'Reflow',
     important: true,
@@ -222,8 +222,8 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
       'No basta con el contraste del texto: el control (borde/estado) también debe ser perceptible para ubicar e identificar el componente.',
   },
   {
-    id: 'wcag-1-4-12', //TODO: juntar al 1.4.10
-    criterion: '1.4.12', // TODO: agregar word-break: break-word; al ejemplo correcto
+    id: 'wcag-1-4-12',
+    criterion: '1.4.12',
     pillar: 'perceptible',
     name: 'Espaciado del texto',
     description:
@@ -233,18 +233,14 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
   },
   {
     id: 'wcag-1-4-13',
-    criterion: '1.4.13', //TODO: buen ejemplo para explciar la relacion del contenido en la lectura
+    criterion: '1.4.13',
     pillar: 'perceptible',
     name: 'Contenido al pasar el cursor o foco',
     description:
       'El contenido adicional mostrado al hover o focus (tooltips, menús) debe ser descartable, persistente y accesible por teclado.',
     explanation:
-      'Mostrar el tooltip también en foco y asociarlo con aria-describedby permite a teclado y lectores de pantalla acceder al contenido adicional.',
+      'Mostrar el tooltip también en foco y asociarlo con aria-describedby permite a teclado y lectores de pantalla acceder al contenido adicional. El uso de aria-describedby brinda descripcion adicional al contenido sin reemplazar el contenido del elemento, lo que es útil para tooltips y mensajes de error.',
   },
-
-  // =========================
-  // OPERABILIDAD (faltantes)
-  // =========================
   {
     id: 'wcag-2-1-2',
     criterion: '2.1.2', //TODO: no accesible, cancelar el movimiento de teclado

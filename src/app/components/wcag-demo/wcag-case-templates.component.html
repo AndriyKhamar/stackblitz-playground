@@ -140,6 +140,9 @@
       <h3 class="title">Confirmación de compra</h3>
       <p class="body">Tu pedido ha sido procesado. Revisa el número de orden en tu email.</p>
     </div>
+    <div class="wcag-example-note">
+         Problema: usuarios con discapacidad visual pueden tener dificultades para distinguir el texto debido al bajo contraste.
+      </div>
   </div>
 </ng-template>
 
@@ -156,17 +159,22 @@
 <ng-template wcagCaseTemplate="wcag-1-4-4/inaccessible">
   <div class="wcag-example case-wcag-1-4-4-inacc">
     <div class="box small">
-      Este texto está dentro de un contenedor con altura fija y overflow hidden.
-      Al aumentar zoom/tamaño de fuente se recorta.
+      Texto descriptivo a modo de prueba del conteido visual.
+    Este texto está dentro de un contenedor con altura fija y overflow hidden.
+      Al aumentar zoom/tamaño de fuente se recorta y/o se presenta dificultades de lectura.
     </div>
+    <div class="wcag-example-note">
+         Problema: al aumentar tamaño del texo, este se recorta y/o se presenta dificultades de lectura.
+      </div>
   </div>
 </ng-template>
 
 <ng-template wcagCaseTemplate="wcag-1-4-4/accessible">
   <div class="wcag-example case-wcag-1-4-4-acc">
     <div class="box base">
+        Texto descriptivo a modo de prueba del conteido visual.
       Este contenido usa unidades relativas y no depende de alturas fijas.
-      Prueba haciendo zoom al 200% (Ctrl + +) y el texto debería seguir siendo visible.
+      Haciendo zoom a la pagina o al contenido el texto sigue siendo visible.
     </div>
   </div>
 </ng-template>
@@ -572,21 +580,30 @@
 <!-- 1.4.10 Reflow -->
 <ng-template wcagCaseTemplate="wcag-1-4-10/inaccessible">
   <div class="wcag-example case-wcag-1-4-10-inacc">
-    <div class="fixed">
-      <div class="col"><strong>Columna A</strong><div>Contenido ancho fijo</div></div>
-      <div class="col"><strong>Columna B</strong><div>Contenido ancho fijo</div></div>
+    <div class="reflow-viewport" aria-label="Viewport simulado">
+      <div class="fixed">
+        <div class="col"><strong>Columna A</strong><div>Contenido ancho fijo</div></div>
+        <div class="col"><strong>Columna B</strong><div>Contenido ancho fijo</div></div>
+      </div>
     </div>
-    <p class="hint">En 320px de ancho (o zoom), aparece scroll horizontal.</p>
+    <p class="hint">Arrastra el borde derecho del recuadro: si queda estrecho, aparece scroll horizontal.</p>
+    <div class="wcag-example-note">
+         Problema: Al haber un scroll horizontal, usuarios pueden tener dificultades para acceder a todo el contenido.
+    </div>
   </div>
 </ng-template>
 
 <ng-template wcagCaseTemplate="wcag-1-4-10/accessible">
   <div class="wcag-example case-wcag-1-4-10-acc">
-    <div class="fluid">
-      <div class="col"><strong>Columna A</strong><div>Se adapta y hace wrap</div></div>
-      <div class="col"><strong>Columna B</strong><div>Se adapta y hace wrap</div></div>
+    <div class="reflow-viewport" aria-label="Viewport simulado">
+      <div class="fluid">
+        <div class="col"><strong>Columna A</strong><div>Se adapta y hace wrap</div></div>
+        <div class="col"><strong>Columna B</strong><div>Se adapta y hace wrap</div></div>
+      </div>
     </div>
-    <p class="hint">Reduce el ancho o prueba zoom: debería evitarse el scroll horizontal.</p>
+    <div class="wcag-example-note">
+         El conteido se adapta y hace wrap.
+    </div>
   </div>
 </ng-template>
 
@@ -595,7 +612,9 @@
   <div class="wcag-example case-wcag-1-4-11-inacc">
     <div class="panel">
       <button class="btn weak" type="button">Botón con borde casi invisible</button>
-      <p class="hint">El borde/forma del control tiene poco contraste.</p>
+    </div>
+      <div class="wcag-example-note">
+         Problema: Sin suficiente contraste en el borde, usuarios pueden no darse cuenta que es un botón.
     </div>
   </div>
 </ng-template>
@@ -604,7 +623,9 @@
   <div class="wcag-example case-wcag-1-4-11-acc">
     <div class="panel">
       <button class="btn strong" type="button">Botón con contraste no textual adecuado</button>
-      <p class="hint">Además del texto, el contorno y estados (focus) deben ser perceptibles.</p>
+    </div>
+      <div class="wcag-example-note">
+         A parte de texto y el borde, el botón tiene un fondo con contraste suficiente para ser distinguible.
     </div>
   </div>
 </ng-template>
@@ -616,7 +637,9 @@
       <div class="box fixed-height user-spacing">
         Texto con espaciado aumentado (simulando preferencias del usuario). En un contenedor con altura fija se recorta.
       </div>
-      <p class="hint">Problema: altura fija + overflow hidden.</p>
+    </div>
+    <div class="wcag-example-note">
+         Problema: Con ajustes de espaciado, el texto se recorta y/o se presenta dificultades de lectura.
     </div>
   </div>
 </ng-template>
@@ -627,7 +650,6 @@
       <div class="box fluid user-spacing">
         Texto con espaciado aumentado (simulando preferencias del usuario). Sin altura fija, el contenido fluye y sigue legible.
       </div>
-      <p class="hint">OK: sin recorte, soporta ajustes de espaciado.</p>
     </div>
   </div>
 </ng-template>
@@ -639,7 +661,9 @@
       <button type="button" class="trigger">¿Qué es esto?</button>
       <span class="tip">Ayuda (solo hover: con teclado no aparece).</span>
     </span>
-    <p class="hint">Problema: el tooltip no aparece al foco de teclado.</p>
+    <div class="wcag-example-note">
+         Problema: la ayuda solo es visible al pasar el cursor, usuarios de teclado o con dificultades para usar el mouse no pueden acceder a esta información.
+    </div>
   </div>
 </ng-template>
 
@@ -649,6 +673,10 @@
       <button type="button" class="trigger" [attr.aria-describedby]="idPrefix + '-tip'">¿Qué es esto?</button>
       <span [attr.id]="idPrefix + '-tip'" class="tip" role="tooltip">Ayuda visible en hover y en foco (teclado).</span>
     </span>
+    <div class="wcag-example-note">
+         El contenido queda accesible tanto para usuarios de mouse como de teclado, al ser visible en hover y en foco respectivamente.
+         El atributo <strong>aria-describedby</strong> conecta el botón con la ayuda, permitiendo que AT anuncie la información adicional al enfocarlo.
+    </div>
   </div>
 </ng-template>
 
