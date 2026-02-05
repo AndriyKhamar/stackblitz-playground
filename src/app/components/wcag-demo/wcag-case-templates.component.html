@@ -373,19 +373,22 @@
 
 <ng-template wcagCaseTemplate="wcag-3-3-1/accessible" let-idPrefix="idPrefix">
   <div class="wcag-example wcag-form-demo case-wcag-3-3-1-acc" *ngIf="ensureErrorIdentificationDemo(idPrefix, 'accessible')">
-    <div class="wcag-field">
-      <label class="wcag-label" [attr.for]="idPrefix + '-wcag-3-3-1-acc-email'">Correo</label>
-      <input
-        #accEmail
-        type="email"
-        required
-        [attr.id]="idPrefix + '-wcag-3-3-1-acc-email'"
-        placeholder="usuario@ejemplo.com"
-        [class.wcag-input--error]="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'email')"
-        [attr.aria-invalid]="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'email') ? 'true' : null"
-        [attr.aria-describedby]="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'email') ? (idPrefix + '-wcag-3-3-1-acc-email-error') : null"
-        (input)="clearErrorIdentificationFieldError(idPrefix, 'accessible', 'email')"
-      />
+    <form class="wcag-field" (submit)="$event.preventDefault()">
+      <fieldset>
+        <legend>Datos de contacto</legend>
+
+        <label class="wcag-label" [attr.for]="idPrefix + '-wcag-3-3-1-acc-email'">Correo</label>
+        <input
+          #accEmail
+          type="email"
+          required
+          [attr.id]="idPrefix + '-wcag-3-3-1-acc-email'"
+          placeholder="usuario@ejemplo.com"
+          [class.wcag-input--error]="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'email')"
+          [attr.aria-invalid]="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'email') ? 'true' : null"
+          [attr.aria-describedby]="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'email') ? (idPrefix + '-wcag-3-3-1-acc-email-error') : null"
+          (input)="clearErrorIdentificationFieldError(idPrefix, 'accessible', 'email')"
+        />
 
       <div
         *ngIf="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'email')"
@@ -396,18 +399,18 @@
         <strong>Correo requerido.</strong> Ingresa una dirección válida (ej: <em>usuario@ejemplo.com</em>).
       </div>
 
-      <label class="wcag-label" [attr.for]="idPrefix + '-wcag-3-3-1-acc-tel'">Teléfono</label>
-      <input
-        #accTel
-        type="tel"
-        required
-        [attr.id]="idPrefix + '-wcag-3-3-1-acc-tel'"
-        placeholder="123-123-1234"
-        [class.wcag-input--error]="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'phone')"
-        [attr.aria-invalid]="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'phone') ? 'true' : null"
-        [attr.aria-describedby]="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'phone') ? (idPrefix + '-wcag-3-3-1-acc-tel-error') : null"
-        (input)="clearErrorIdentificationFieldError(idPrefix, 'accessible', 'phone')"
-      />
+        <label class="wcag-label" [attr.for]="idPrefix + '-wcag-3-3-1-acc-tel'">Teléfono</label>
+        <input
+          #accTel
+          type="tel"
+          required
+          [attr.id]="idPrefix + '-wcag-3-3-1-acc-tel'"
+          placeholder="123-123-1234"
+          [class.wcag-input--error]="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'phone')"
+          [attr.aria-invalid]="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'phone') ? 'true' : null"
+          [attr.aria-describedby]="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'phone') ? (idPrefix + '-wcag-3-3-1-acc-tel-error') : null"
+          (input)="clearErrorIdentificationFieldError(idPrefix, 'accessible', 'phone')"
+        />
 
       <div
         *ngIf="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'phone')"
@@ -418,15 +421,16 @@
         <strong>Teléfono requerido.</strong> Ingresa un número de teléfono (ej: <em>123-123-1234</em>).
       </div>
 
-      <button
-        type="button"
-        class="wcag-primary"
-        [attr.id]="idPrefix + '-wcag-3-3-1-acc-submit'"
-        (click)="onErrorIdentificationSubmit(idPrefix, 'accessible', accEmail.value, accTel.value, $event)"
-      >
-        Enviar
-      </button>
-    </div>
+        <button
+          type="button"
+          class="wcag-primary"
+          [attr.id]="idPrefix + '-wcag-3-3-1-acc-submit'"
+          (click)="onErrorIdentificationSubmit(idPrefix, 'accessible', accEmail.value, accTel.value, $event)"
+        >
+          Enviar
+        </button>
+      </fieldset>
+    </form>
       <div class="wcag-example-note">
         <ul>
             <li>Cada error debe ser descriptivo y especifico para que el usuario pueda entender qué salió mal y cómo corregirlo.</li>
