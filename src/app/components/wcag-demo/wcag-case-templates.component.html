@@ -180,24 +180,58 @@
 </ng-template>
 
 <!-- 2.1.1 Teclado -->
-<ng-template wcagCaseTemplate="wcag-2-1-1/inaccessible">
+<ng-template wcagCaseTemplate="wcag-2-1-1/inaccessible" let-idPrefix="idPrefix">
   <div class="wcag-example case-wcag-2-1-1-inacc">
-    <div class="fake-click">Hacer click</div>
-    <p class="wcag-example-note">
-      Con mouse se ve el “click” (efecto visual). Con teclado no funciona porque el <strong>div</strong> no recibe foco ni maneja Enter/Espacio.
-    </p>
+    <div
+      class="fake-click wcag-action--small"
+      role="button"
+      tabindex="0"
+      (click)="showClickedNote(idPrefix + '-wcag-2-1-1-inacc')"
+    >
+      Activar
+    </div>
+
+    <div
+      class="wcag-click-note"
+      role="status"
+      aria-live="polite"
+      *ngIf="isClickedNoteVisible(idPrefix + '-wcag-2-1-1-inacc')"
+    >
+      clicked
+    </div>
+    <div class="wcag-example-note">
+      Problema: aunque recibe foco (tabindex), solo responde al mouse porque no maneja Enter/Espacio.
+    </div>
   </div>
 </ng-template>
 
 <ng-template wcagCaseTemplate="wcag-2-1-1/accessible" let-idPrefix="idPrefix">
   <div class="wcag-example case-wcag-2-1-1-acc">
-    <button type="button">Hacer click</button>
+    <button type="button" (click)="showClickedNote(idPrefix + '-wcag-2-1-1-acc')">Activar (button)</button>
 
-    <div class="fake-button" role="button" tabindex="0" [attr.aria-label]="'Botón simulado ' + idPrefix">
-      Hacer click
+    <div
+      class="fake-button"
+      role="button"
+      tabindex="0"
+      [attr.aria-label]="'Botón simulado ' + idPrefix"
+      (click)="showClickedNote(idPrefix + '-wcag-2-1-1-acc')"
+      (keydown)="onButtonLikeKeydown($event, idPrefix + '-wcag-2-1-1-acc')"
+    >
+      Activar (div)
     </div>
-    <p class="wcag-example-note">Mejor usar <strong>button</strong>; si no, añadir role/tabindex y soporte teclado.</p>
-  </div>
+
+    <div
+      class="wcag-click-note"
+      role="status"
+      aria-live="polite"
+      *ngIf="isClickedNoteVisible(idPrefix + '-wcag-2-1-1-acc')"
+    >
+      clicked
+    </div>
+    <div class="wcag-example-note">
+        El div simula un botón usando <strong>role="button"</strong>, maneja eventos de teclado <strong>(keydown)</strong> para Enter y Espacio.
+    </div>  
+</div>
 </ng-template>
 
 <!-- 2.4.1 Saltar contenido -->
@@ -231,17 +265,42 @@
 <!-- 2.4.4 Propósito del enlace -->
 <ng-template wcagCaseTemplate="wcag-2-4-4/inaccessible">
   <div class="wcag-example case-wcag-2-4-4-inacc">
-    <a href="/articulos/accesibilidad">Leer más</a>
-    <p class="wcag-example-note">Texto genérico: no indica destino.</p>
-  </div>
+    <a href="/articulos/accesibilidad">Haz click aqui!</a>
+    <div class="wcag-example-note">
+        Problema: el texto del enlace no describe claramente su propósito, lo que puede generar confusión sobre qué esperar al hacer clic.
+    </div>   
+ </div>
 </ng-template>
 
-<ng-template wcagCaseTemplate="wcag-2-4-4/accessible">
+<ng-template wcagCaseTemplate="wcag-2-4-4/accessible" let-idPrefix="idPrefix">
   <div class="wcag-example case-wcag-2-4-4-acc">
-    <a href="/articulos/accesibilidad">Leer más sobre accesibilidad web</a>
+    <span class="sr-only" [attr.id]="idPrefix + '-wcag-2-4-4-newtab'">Se abre en una nueva pestaña.</span>
+    <a
+      href="/articulos/accesibilidad"
+      target="_blank"
+      rel="noopener noreferrer"
+      [attr.aria-describedby]="idPrefix + '-wcag-2-4-4-newtab'"
+    >
+      Leer más sobre accesibilidad web
+    </a>
     <div style="margin-top: 10px;">
-      <a href="/articulos/accesibilidad" aria-label="Leer más: Guía completa de accesibilidad web">Leer más</a>
+      <a
+        href="/articulos/accesibilidad"
+        target="_blank"
+        rel="noopener noreferrer"
+        [attr.aria-describedby]="idPrefix + '-wcag-2-4-4-newtab'"
+        aria-label="Leer más: Guía completa de accesibilidad web"
+      >
+        Leer más
+      </a>
     </div>
+    <div class="wcag-example-note">
+        <ul>
+            <li>El texto del enlace describe claramente su propósito. Alternativamente, se puede usar un texto más breve acompañado de un <strong>aria-label</strong> que proporcione contexto adicional.</li>
+            <li>Mediante <strong>aria-describedby</strong> se podría asociar el enlace con una descripción más detallada ubicada cerca del enlace, proporcionando información adicional sin sobrecargar el texto del enlace.</li>
+            <li>Cuando un elnace lleva <strong>target="_blank"</strong> es recomendable informar al usuario que el enlace se abrirá en una nueva pestaña/ventana.</li>
+        </ul>
+    </div> 
   </div>
 </ng-template>
 
@@ -251,7 +310,8 @@
     <h1>Título</h1>
     <h3>Sección importante</h3>
     <h2>Subsección</h2>
-    <p class="wcag-example-note">Salto de jerarquía: H1 → H3 → H2.</p>
+    <div class="wcag-example-note">
+        Problema: salto de jerarquía: H1 → H3 → H2. Usuarios de lectores de pantalla pueden saltarse el contenido si unicamente confían en la jerarquía de la estructura.</div>
   </div>
 </ng-template>
 
@@ -262,26 +322,6 @@
     <h3>Servicio 1</h3>
     <h3>Servicio 2</h3>
     <h2>Contacto</h2>
-  </div>
-</ng-template>
-
-<!-- 2.5.3 Etiqueta en el nombre -->
-<ng-template wcagCaseTemplate="wcag-2-5-3/inaccessible">
-  <div class="wcag-example wcag-form-demo case-wcag-2-5-3-inacc">
-    <div class="wcag-field">
-      <div class="wcag-fake-label">Email</div>
-      <input type="text" aria-label="Dirección de correo electrónico" placeholder="usuario@ejemplo.com" />
-      <p class="wcag-example-note">El nombre accesible no incluye la etiqueta visible (“Email”).</p>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template wcagCaseTemplate="wcag-2-5-3/accessible" let-idPrefix="idPrefix">
-  <div class="wcag-example wcag-form-demo case-wcag-2-5-3-acc">
-    <div class="wcag-field">
-      <label class="wcag-label" [attr.for]="idPrefix + '-email'">Email</label>
-      <input [attr.id]="idPrefix + '-email'" type="email" autocomplete="email" placeholder="usuario@ejemplo.com" />
-    </div>
   </div>
 </ng-template>
 
@@ -610,9 +650,7 @@
 <!-- 1.4.11 Contraste no textual -->
 <ng-template wcagCaseTemplate="wcag-1-4-11/inaccessible">
   <div class="wcag-example case-wcag-1-4-11-inacc">
-    <div class="panel">
       <button class="btn weak" type="button">Botón con borde casi invisible</button>
-    </div>
       <div class="wcag-example-note">
          Problema: Sin suficiente contraste en el borde, usuarios pueden no darse cuenta que es un botón.
     </div>
@@ -621,9 +659,7 @@
 
 <ng-template wcagCaseTemplate="wcag-1-4-11/accessible">
   <div class="wcag-example case-wcag-1-4-11-acc">
-    <div class="panel">
       <button class="btn strong" type="button">Botón con contraste no textual adecuado</button>
-    </div>
       <div class="wcag-example-note">
          A parte de texto y el borde, el botón tiene un fondo con contraste suficiente para ser distinguible.
     </div>
@@ -683,70 +719,264 @@
 <!-- 2.1.2 Sin trampas de teclado -->
 <ng-template wcagCaseTemplate="wcag-2-1-2/inaccessible">
   <div class="wcag-example case-wcag-2-1-2-inacc">
-    <div class="trap" tabindex="0">Modal que bloquea todas las teclas: no puedes salir</div>
-    <p class="hint">Ejemplo conceptual: no debe bloquear Tab/Escape sin salida.</p>
+    <div class="wcag-subexample wcag-subexample--first">
+      <div class="wcag-field">
+        <label class="wcag-label" for="wcag-2-1-2-inacc-first">Nombre</label>
+        <input
+          id="wcag-2-1-2-inacc-first"
+          type="text"
+          placeholder="Escribe aquí"
+          (keydown)="blockTabOnKeydown($event)"
+        />
+      </div>
+
+      <div class="wcag-field">
+        <label class="wcag-label" for="wcag-2-1-2-inacc-second">Apellido</label>
+        <input id="wcag-2-1-2-inacc-second" type="text" placeholder="No alcanzable con Tab" />
+      </div>
+    </div>
+
+    <div class="wcag-subexample">
+      <button
+        type="button"
+        (click)="openModal('wcag-2-1-2-inacc-modal', 'wcag-2-1-2-inacc-modal-dialog')"
+      >
+        Abrir modal
+      </button>
+
+      <div class="wcag-modal-backdrop" *ngIf="isModalOpen('wcag-2-1-2-inacc-modal')">
+        <div
+          id="wcag-2-1-2-inacc-modal-dialog"
+          class="dialog trap"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Modal de prueba (inaccesible)"
+          tabindex="0"
+          (keydown)="blockTabAndEscapeOnKeydown($event)"
+        >
+          <h2>Preferencias</h2>
+          <p>Contenido del modal... navegación por teclado anulada, no permite alternativas para salir.</p>
+
+          <button
+            type="button"
+            tabindex="-1"
+            (click)="closeModal('wcag-2-1-2-inacc-modal')"
+            aria-label="Cerrar (solo mouse)"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="wcag-example-note">
+      Problema: una “trampa de teclado” impide salir de un área o modal usando únicamente el teclado.
+    </div>
   </div>
 </ng-template>
 
 <ng-template wcagCaseTemplate="wcag-2-1-2/accessible" let-idPrefix="idPrefix">
   <div class="wcag-example case-wcag-2-1-2-acc">
-    <div role="dialog" aria-modal="true" [attr.aria-labelledby]="idPrefix + '-dlg-title'" class="dialog">
-      <h2 [attr.id]="idPrefix + '-dlg-title'">Preferencias</h2>
-      <p>Contenido del modal…</p>
-      <button type="button" aria-label="Cerrar">Cerrar</button>
-      <p class="hint">Buenas prácticas: botón de cierre + soporte Escape + gestión de foco.</p>
+    <div class="wcag-subexample wcag-subexample--first">
+      <div class="wcag-field">
+        <label class="wcag-label" [attr.for]="idPrefix + '-first'">Nombre</label>
+        <input [attr.id]="idPrefix + '-first'" type="text" placeholder="Tab funciona" />
+      </div>
+
+      <div class="wcag-field">
+        <label class="wcag-label" [attr.for]="idPrefix + '-second'">Apellido</label>
+        <input [attr.id]="idPrefix + '-second'" type="text" placeholder="Alcanzable con Tab" />
+      </div>
     </div>
-  </div>
-</ng-template>
 
-<!-- 2.1.4 Atajos de teclado (tecla única) -->
-<ng-template wcagCaseTemplate="wcag-2-1-4/inaccessible">
-  <div class="wcag-example case-wcag-2-1-4-inacc">
-    <p>Atajo de una tecla: pulsar <kbd>s</kbd> guarda incluso mientras escribes.</p>
-    <p class="hint">Problema: activaciones accidentales e interferencia con inputs/AT.</p>
-  </div>
-</ng-template>
+    <div class="wcag-subexample">
+      <button
+        type="button"
+        [attr.id]="idPrefix + '-wcag-2-1-2-acc-open'"
+        aria-haspopup="dialog"
+        [attr.aria-controls]="idPrefix + '-wcag-2-1-2-acc-area'"
+        (click)="openModal(idPrefix + '-wcag-2-1-2-acc-modal', idPrefix + '-wcag-2-1-2-acc-close-x')"
+      >
+        Abrir modal
+      </button>
 
-<ng-template wcagCaseTemplate="wcag-2-1-4/accessible">
-  <div class="wcag-example case-wcag-2-1-4-acc">
-    <p>Atajo con modificador: <kbd>Ctrl</kbd> + <kbd>S</kbd> (y deshabilitable).</p>
-    <button type="button" aria-pressed="false">Atajos: ON</button>
+      <div class="wcag-modal-backdrop" *ngIf="isModalOpen(idPrefix + '-wcag-2-1-2-acc-modal')">
+        <div
+          class="dialog"
+          role="dialog"
+          aria-modal="true"
+          [attr.aria-labelledby]="idPrefix + '-dlg-title'"
+          [attr.id]="idPrefix + '-wcag-2-1-2-acc-area'"
+          [appFocusTrap]="idPrefix + '-wcag-2-1-2-acc-area'"
+          [trapMode]="FocusTrapMode.TAB"
+          tabindex="-1"
+          (keydown.escape)="closeModalFromKeyboard(idPrefix + '-wcag-2-1-2-acc-modal')"
+        >
+          <button
+            type="button"
+            class="dialog__close-x"
+            [attr.id]="idPrefix + '-wcag-2-1-2-acc-close-x'"
+            aria-label="Cerrar modal"
+            (click)="closeModal(idPrefix + '-wcag-2-1-2-acc-modal')"
+            (keydown.enter)="$event.preventDefault(); $event.stopPropagation(); closeModalFromKeyboard(idPrefix + '-wcag-2-1-2-acc-modal')"
+            (keydown.space)="$event.preventDefault(); $event.stopPropagation(); closeModalFromKeyboard(idPrefix + '-wcag-2-1-2-acc-modal')"
+          >
+            ×
+          </button>
+          <h2 [attr.id]="idPrefix + '-dlg-title'">Preferencias</h2>
+          <p>Contenido del modal... navegación controlada, permite salir presionando Escape.</p>
+          <button
+            type="button"
+            [attr.id]="idPrefix + '-wcag-2-1-2-acc-close'"
+            (click)="closeModal(idPrefix + '-wcag-2-1-2-acc-modal')"
+            (keydown.enter)="$event.preventDefault(); $event.stopPropagation(); closeModalFromKeyboard(idPrefix + '-wcag-2-1-2-acc-modal')"
+            (keydown.space)="$event.preventDefault(); $event.stopPropagation(); closeModalFromKeyboard(idPrefix + '-wcag-2-1-2-acc-modal')"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="wcag-example-note">
+        <ul>
+            <li>Navegacion en el formulario no debe quedar bloqueada.</li>
+            <li>Es muy comun querer atrapar el foco en un modal, pero nunca debemos hacerlo sin proporcionar una forma clara de salir.</li>
+            <li>El boton encargado de abrir un modal debe tener el atributo <strong>aria-haspopup="dialog"</strong> para indicar que abre un diálogo, y <strong>aria-controls</strong> para conectar el botón con el área del modal.</li>
+            <li>El uso del atributo <strong>aria-modal</strong> es fundamental para indicar que un modal es modal y para ayudar a los lectores de pantalla a entender el contexto.</li>
+            <li>Cambio del role a <strong>dialog</strong> también es importante para que AT lo reconozca como un diálogo modal, lo que puede afectar cómo se anuncia y cómo se maneja el foco.</li>
+        </ul>
+    </div>
   </div>
 </ng-template>
 
 <!-- 2.2.1 Tiempo ajustable -->
-<ng-template wcagCaseTemplate="wcag-2-2-1/inaccessible">
+<ng-template wcagCaseTemplate="wcag-2-2-1/inaccessible" let-idPrefix="idPrefix">
+  <ng-container *ngIf="ensureSessionTimeoutInaccessible(idPrefix)"></ng-container>
   <div class="wcag-example case-wcag-2-2-1-inacc">
-    <p>Tu sesión se cerrará automáticamente.</p>
-    <p class="hint">Sin aviso adecuado ni opción de extender.</p>
+    <div class="status" *ngIf="isSessionTimeoutPhase(idPrefix, 'inaccessible', 'countdown')">
+      La sesión expira en {{ getSessionTimeoutRemaining(idPrefix, 'inaccessible') }} segundos.
+    </div>
+
+    <div class="status" *ngIf="isSessionTimeoutPhase(idPrefix, 'inaccessible', 'expired')">
+      Sesión expirada.
+    </div>
+
+    <div class="wcag-example-note">
+      Problema: el tiempo se agota y el usuario no tiene alternativa para extender la sesión.
+    </div>
   </div>
 </ng-template>
 
-<ng-template wcagCaseTemplate="wcag-2-2-1/accessible">
+<ng-template wcagCaseTemplate="wcag-2-2-1/accessible" let-idPrefix="idPrefix">
+  <ng-container *ngIf="ensureSessionTimeoutAccessible(idPrefix)"></ng-container>
   <div class="wcag-example case-wcag-2-2-1-acc">
-    <div aria-live="polite" class="status">Tu sesión expirará en 60 segundos.</div>
-    <button type="button">Extender sesión</button>
-    <button type="button">Cerrar sesión ahora</button>
+    <div
+      aria-live="polite"
+      class="status"
+      *ngIf="isSessionTimeoutPhase(idPrefix, 'accessible', 'countdown')"
+    >
+      La sesión expira en {{ getSessionTimeoutRemaining(idPrefix, 'accessible') }} segundos.
+    </div>
+
+    <div class="status" *ngIf="isSessionTimeoutPhase(idPrefix, 'accessible', 'closed')">
+      Sesión cerrada.
+    </div>
+
+    <div
+      class="wcag-modal-backdrop"
+      *ngIf="isModalOpen(idPrefix + '-wcag-2-2-1-acc-modal')"
+    >
+      <div
+        class="dialog"
+        role="dialog"
+        aria-modal="true"
+        [attr.aria-labelledby]="idPrefix + '-wcag-2-2-1-title'"
+        [attr.id]="idPrefix + '-wcag-2-2-1-acc-area'"
+        [appFocusTrap]="idPrefix + '-wcag-2-2-1-acc-area'"
+        [trapMode]="FocusTrapMode.TAB"
+        tabindex="-1"
+        (keydown.escape)="declineSessionTimeoutExtension(idPrefix, true)"
+      >
+        <button
+          type="button"
+          class="dialog__close-x"
+          aria-label="Cerrar"
+          (click)="declineSessionTimeoutExtension(idPrefix, false)"
+          (keydown.enter)="$event.preventDefault(); $event.stopPropagation(); declineSessionTimeoutExtension(idPrefix, true)"
+          (keydown.space)="$event.preventDefault(); $event.stopPropagation(); declineSessionTimeoutExtension(idPrefix, true)"
+        >
+          ×
+        </button>
+
+        <h2 [attr.id]="idPrefix + '-wcag-2-2-1-title'">¿Prolongar sesión?</h2>
+        <p>Tu sesión está por expirar. Puedes extenderla o cerrar la sesión.</p>
+
+        <button
+          type="button"
+          [attr.id]="idPrefix + '-wcag-2-2-1-acc-yes'"
+          (click)="extendSessionTimeout(idPrefix, 5, false)"
+          (keydown.enter)="$event.preventDefault(); $event.stopPropagation(); extendSessionTimeout(idPrefix, 5, true)"
+          (keydown.space)="$event.preventDefault(); $event.stopPropagation(); extendSessionTimeout(idPrefix, 5, true)"
+        >
+          Sí, prolongar 5 segundos
+        </button>
+
+        <button
+          type="button"
+          (click)="declineSessionTimeoutExtension(idPrefix, false)"
+          (keydown.enter)="$event.preventDefault(); $event.stopPropagation(); declineSessionTimeoutExtension(idPrefix, true)"
+          (keydown.space)="$event.preventDefault(); $event.stopPropagation(); declineSessionTimeoutExtension(idPrefix, true)"
+        >
+          No, cerrar sesión
+        </button>
+      </div>
+    </div>
+
+    <div class="wcag-example-note">
+      Se requiere el uso de role <strong>alert</strong> o <strong>aria-live</strong> para notificar al usuario sobre el tiempo restante, y un diálogo modal para ofrecer opciones claras de extender o cerrar sesión.
+      En lugar de cerrar la sesión sin aviso, se notifica y se ofrece una forma clara de extender el tiempo.
+    </div>
   </div>
 </ng-template>
 
 <!-- 2.2.2 Pausar, detener, ocultar -->
-<ng-template wcagCaseTemplate="wcag-2-2-2/inaccessible">
+<ng-template wcagCaseTemplate="wcag-2-2-2/inaccessible" let-idPrefix="idPrefix">
+  <ng-container *ngIf="ensureCarouselInaccessible(idPrefix)"></ng-container>
   <div class="wcag-example case-wcag-2-2-2-inacc">
     <div class="carousel" aria-label="Promociones">
-      <div class="slide">Slide 1</div>
-      <div class="slide">Slide 2</div>
+      <div class="slide" *ngIf="getCarouselIndex(idPrefix, 'inaccessible') === 0">Slide 1</div>
+      <div class="slide" *ngIf="getCarouselIndex(idPrefix, 'inaccessible') === 1">Slide 2</div>
     </div>
-    <p class="hint">Rotación automática sin controles.</p>
+    <div class="wcag-example-note">
+      Problema: rotación automática cada 1s sin controles para pausar o navegar.
+    </div>
   </div>
 </ng-template>
 
 <ng-template wcagCaseTemplate="wcag-2-2-2/accessible" let-idPrefix="idPrefix">
+  <ng-container *ngIf="ensureCarouselAccessible(idPrefix)"></ng-container>
   <div class="wcag-example case-wcag-2-2-2-acc">
     <div class="carousel" [attr.id]="idPrefix + '-promo'" aria-label="Promociones">
-      <button type="button" [attr.aria-controls]="idPrefix + '-promo'" aria-pressed="false">Pausar</button>
-      <div class="slide">Slide 1</div>
-      <div class="slide">Slide 2</div>
+      <div class="carousel-controls">
+        <button
+          type="button"
+          [attr.aria-controls]="idPrefix + '-promo'"
+          [attr.aria-pressed]="isCarouselPaused(idPrefix)"
+          (click)="toggleCarouselPaused(idPrefix)"
+        >
+          {{ isCarouselPaused(idPrefix) ? 'Reanudar' : 'Pausar' }}
+        </button>
+
+        <button type="button" aria-label="Slide anterior" (click)="carouselPrev(idPrefix)">←</button>
+        <button type="button" aria-label="Siguiente slide" (click)="carouselNext(idPrefix)">→</button>
+      </div>
+
+      <div class="slide" *ngIf="getCarouselIndex(idPrefix, 'accessible') === 0">Slide 1</div>
+      <div class="slide" *ngIf="getCarouselIndex(idPrefix, 'accessible') === 1">Slide 2</div>
+    </div>
+
+    <div class="wcag-example-note">
+      Ofrecer un control de pausa y botones para ir al siguiente/anterior.
     </div>
   </div>
 </ng-template>
@@ -755,6 +985,9 @@
 <ng-template wcagCaseTemplate="wcag-2-3-1/inaccessible">
   <div class="wcag-example case-wcag-2-3-1-inacc">
     <div class="flash">Banner parpadeante</div>
+    <div class="wcag-example-note">
+      Problema: parpadeos rápidos pueden causar convulsiones o reacciones físicas en personas susceptibles.
+    </div>
   </div>
 </ng-template>
 
@@ -764,27 +997,16 @@
   </div>
 </ng-template>
 
-<!-- 2.4.2 Página titulada -->
-<ng-template wcagCaseTemplate="wcag-2-4-2/inaccessible">
-  <div class="wcag-example case-wcag-2-4-2-inacc">
-    <pre class="code"><code>&lt;head&gt;\n  &lt;title&gt;&lt;/title&gt;\n&lt;/head&gt;</code></pre>
-  </div>
-</ng-template>
-
-<ng-template wcagCaseTemplate="wcag-2-4-2/accessible">
-  <div class="wcag-example case-wcag-2-4-2-acc">
-    <pre class="code"><code>&lt;head&gt;\n  &lt;title&gt;Demo WCAG 2.1 - Accesibilidad Web&lt;/title&gt;\n&lt;/head&gt;</code></pre>
-  </div>
-</ng-template>
-
 <!-- 2.4.3 Orden del foco -->
 <ng-template wcagCaseTemplate="wcag-2-4-3/inaccessible">
   <div class="wcag-example case-wcag-2-4-3-inacc">
     <a href="#" tabindex="3">Tercero</a>
     <button type="button" tabindex="1">Primero</button>
     <input tabindex="2" placeholder="Segundo" />
-    <p class="hint">tabindex positivo altera el orden natural.</p>
-  </div>
+    <div class="wcag-example-note">
+      Problema: el orden del foco no sigue un patrón lógico, lo que puede causar confusión y dificultades de navegación para usuarios de teclado o AT.
+    </div>  
+</div>
 </ng-template>
 
 <ng-template wcagCaseTemplate="wcag-2-4-3/accessible">
@@ -798,20 +1020,24 @@
 <!-- 2.4.5 Múltiples vías de navegación -->
 <ng-template wcagCaseTemplate="wcag-2-4-5/inaccessible">
   <div class="wcag-example case-wcag-2-4-5-inacc">
-    <p>Solo puedes encontrar páginas usando la búsqueda.</p>
-    <input type="search" aria-label="Buscar" />
+    <label for="search-input-wcag-2-4-5-inacc">Buscar paginas</label>
+    <input id="search-input-wcag-2-4-5-inacc" type="search" aria-label="Buscar" />
+    <div class="wcag-example-note">
+      Problema: sin manera alternativa de navegación por paginas, usuarios pueden tener dificultades para encontrar contenido o entender la estructura del sitio, especialmente si tienen discapacidades cognitivas o de aprendizaje.
+    </div>  
   </div>
 </ng-template>
 
 <ng-template wcagCaseTemplate="wcag-2-4-5/accessible">
   <div class="wcag-example case-wcag-2-4-5-acc">
     <nav aria-label="Navegación principal">
-      <a href="/productos">Productos</a>
-      <a href="/precios">Precios</a>
+      <a href="/productos">Productos/</a>
+      <a href="/precios">Precios/</a>
       <a href="/contacto">Contacto</a>
     </nav>
     <p><a href="/mapa-del-sitio">Mapa del sitio</a></p>
-    <input type="search" aria-label="Buscar" />
+    <label for="search-input-wcag-2-4-5-acc">Buscar paginas</label>
+    <input id="search-input-wcag-2-4-5-acc" type="search" aria-label="Buscar" />
   </div>
 </ng-template>
 
@@ -819,8 +1045,9 @@
 <ng-template wcagCaseTemplate="wcag-2-4-7/inaccessible">
   <div class="wcag-example case-wcag-2-4-7-inacc">
     <button type="button" class="no-outline">Guardar</button>
-    <p class="hint">outline eliminado sin reemplazo.</p>
-  </div>
+    <div class="wcag-example-note">
+      Problema: sin un foco visible usuario puede perderse en la navegación.
+    </div>   </div>
 </ng-template>
 
 <ng-template wcagCaseTemplate="wcag-2-4-7/accessible">
@@ -830,111 +1057,228 @@
 </ng-template>
 
 <!-- 2.5.1 Gestos con puntero -->
-<ng-template wcagCaseTemplate="wcag-2-5-1/inaccessible">
+<ng-template wcagCaseTemplate="wcag-2-5-1/inaccessible" let-idPrefix="idPrefix">
   <div class="wcag-example case-wcag-2-5-1-inacc">
-    <div class="map" aria-label="Mapa">Arrastra con el dedo para moverte</div>
-  </div>
-</ng-template>
+    <div
+      class="pointer-swap"
+      *ngIf="ensurePointerGestureSwap(idPrefix, 'inaccessible')"
+    >
+      <div class="pointer-swap__slot" *ngFor="let key of getPointerGestureOrder(idPrefix, 'inaccessible')">
+        <div
+          class="pointer-swap__item"
+          [class.pointer-swap__item--a]="key === 'a'"
+          [class.pointer-swap__item--b]="key === 'b'"
+          draggable="true"
+          (dragstart)="onPointerGestureDragStart($event, idPrefix, 'inaccessible', key)"
+          (dragover)="onPointerGestureDragOver($event)"
+          (drop)="onPointerGestureDrop($event, idPrefix, 'inaccessible', key)"
+        >
+          <div class="pointer-swap__title">{{ key === 'a' ? 'Contenedor A' : 'Contenedor B' }}</div>
+          <div class="pointer-swap__hint">Arrastra para intercambiar</div>
+        </div>
+      </div>
+    </div>
 
-<ng-template wcagCaseTemplate="wcag-2-5-1/accessible">
-  <div class="wcag-example case-wcag-2-5-1-acc">
-    <div class="map" aria-label="Mapa">
-      <button type="button" aria-label="Mover arriba">↑</button>
-      <button type="button" aria-label="Mover abajo">↓</button>
-      <button type="button" aria-label="Mover izquierda">←</button>
-      <button type="button" aria-label="Mover derecha">→</button>
+    <div class="wcag-example-note">
+      Problema: la acción solo se puede realizar mediante gesto de arrastrar (sin alternativa por controles).
     </div>
   </div>
 </ng-template>
 
-<!-- 2.5.2 Cancelación del puntero -->
-<ng-template wcagCaseTemplate="wcag-2-5-2/inaccessible">
-  <div class="wcag-example case-wcag-2-5-2-inacc">
-    <button type="button">Eliminar</button>
-    <p class="hint">Problema típico: acción al “down” sin cancelar (conceptual).</p>
-  </div>
-</ng-template>
+<ng-template wcagCaseTemplate="wcag-2-5-1/accessible" let-idPrefix="idPrefix">
+  <div class="wcag-example case-wcag-2-5-1-acc">
+    <div class="pointer-swap__actions">
+      <button type="button" (click)="swapPointerGestureOrder(idPrefix)">Intercambiar contenedores</button>
+    </div>
 
-<ng-template wcagCaseTemplate="wcag-2-5-2/accessible">
-  <div class="wcag-example case-wcag-2-5-2-acc">
-    <button type="button">Eliminar</button>
-    <p class="hint">Mejor: confirmar y activar en click (up) para permitir cancelar.</p>
-  </div>
-</ng-template>
+    <div
+      class="pointer-swap"
+      *ngIf="ensurePointerGestureSwap(idPrefix, 'accessible')"
+    >
+      <div class="pointer-swap__slot" *ngFor="let key of getPointerGestureOrder(idPrefix, 'accessible')">
+        <div
+          class="pointer-swap__item"
+          [class.pointer-swap__item--a]="key === 'a'"
+          [class.pointer-swap__item--b]="key === 'b'"
+          draggable="true"
+          (dragstart)="onPointerGestureDragStart($event, idPrefix, 'accessible', key)"
+          (dragover)="onPointerGestureDragOver($event)"
+          (drop)="onPointerGestureDrop($event, idPrefix, 'accessible', key)"
+        >
+          <div class="pointer-swap__title">{{ key === 'a' ? 'Contenedor A' : 'Contenedor B' }}</div>
+          <div class="pointer-swap__hint">Arrastra o usa el botón</div>
+        </div>
+      </div>
+    </div>
 
-<!-- 2.5.4 Activación por movimiento -->
-<ng-template wcagCaseTemplate="wcag-2-5-4/inaccessible">
-  <div class="wcag-example case-wcag-2-5-4-inacc">
-    <p>Agitar el dispositivo ejecuta “deshacer” sin alternativa.</p>
-  </div>
-</ng-template>
-
-<ng-template wcagCaseTemplate="wcag-2-5-4/accessible">
-  <div class="wcag-example case-wcag-2-5-4-acc">
-    <button type="button">Deshacer</button>
-    <label class="toggle">
-      <input type="checkbox" checked />
-      Activar acciones por movimiento
-    </label>
+    <div class="wcag-example-note">
+      Se mantiene el gesto de arrastrar, y además existe un control (botón) para realizar la misma acción sin depender del gesto.
+    </div>
   </div>
 </ng-template>
 
 <!-- 3.1.1 Idioma de la página -->
-<ng-template wcagCaseTemplate="wcag-3-1-1/inaccessible">
+<ng-template wcagCaseTemplate="wcag-3-1-1/inaccessible" let-idPrefix="idPrefix">
   <div class="wcag-example case-wcag-3-1-1-inacc">
     <pre class="code"><code>&lt;html&gt;...&lt;/html&gt;</code></pre>
-  </div>
-</ng-template>
-
-<ng-template wcagCaseTemplate="wcag-3-1-1/accessible">
-  <div class="wcag-example case-wcag-3-1-1-acc">
-    <pre class="code"><code>&lt;html lang=&quot;es&quot;&gt;...&lt;/html&gt;</code></pre>
-  </div>
-</ng-template>
-
-<!-- 3.1.2 Idioma de partes -->
-<ng-template wcagCaseTemplate="wcag-3-1-2/inaccessible">
-  <div class="wcag-example case-wcag-3-1-2-inacc">
     <p>El mensaje dice: Welcome to our site.</p>
+    <div class="wcag-example-note">
+      Problema: sin <strong>lang</strong> en la página y sin marcar el idioma de frases extranjeras, los lectores de pantalla pueden usar una pronunciación incorrecta.
+    </div>
   </div>
 </ng-template>
 
-<ng-template wcagCaseTemplate="wcag-3-1-2/accessible">
-  <div class="wcag-example case-wcag-3-1-2-acc">
-    <p>El mensaje dice: <span lang="en">Welcome to our site</span>.</p>
+<ng-template wcagCaseTemplate="wcag-3-1-1/accessible" let-idPrefix="idPrefix">
+  <div class="wcag-example case-wcag-3-1-1-acc" *ngIf="ensureLanguageDemo(idPrefix)">
+    <div class="lang-demo">
+      <label class="wcag-label" [attr.for]="idPrefix + '-lang'">Idioma de la página (demo)</label>
+      <select
+        class="lang-demo__select"
+        [attr.id]="idPrefix + '-lang'"
+        [value]="getLanguageDemoLang(idPrefix)"
+        (change)="onLanguageDemoChange($event, idPrefix)"
+      >
+        <option value="es">Español</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+
+    <div class="lang-demo__preview" [attr.lang]="getLanguageDemoLang(idPrefix)">
+      <p *ngIf="getLanguageDemoLang(idPrefix) === 'es'">
+        El mensaje dice: <span lang="en">Welcome to our site</span>.
+      </p>
+      <p *ngIf="getLanguageDemoLang(idPrefix) === 'en'">
+        The message says: <span lang="es">Bienvenido a nuestro sitio</span>.
+      </p>
+    </div>
+
+    <div class="wcag-example-note">
+      <ul>
+        <li><strong>3.1.1</strong>: el idioma principal se define con <strong>lang</strong> (ej. <code>&lt;html lang="es"&gt;</code> o en el contenedor principal).</li>
+        <li><strong>3.1.2</strong>: para frases en otro idioma, marca el fragmento con <strong>lang</strong>.</li>
+      </ul>
+    </div>
   </div>
 </ng-template>
 
 <!-- 3.2.1 Al recibir foco -->
-<ng-template wcagCaseTemplate="wcag-3-2-1/inaccessible">
+<ng-template wcagCaseTemplate="wcag-3-2-1/inaccessible" let-idPrefix="idPrefix">
   <div class="wcag-example case-wcag-3-2-1-inacc">
-    <pre class="code"><code>&lt;input onfocus=&quot;location.href='/checkout'&quot; placeholder=&quot;Cupones&quot;&gt;</code></pre>
+    <button
+      type="button"
+      (focus)="openPanel(idPrefix + '-wcag-3-2-1-panel-inacc')"
+      (blur)="closePanel(idPrefix + '-wcag-3-2-1-panel-inacc')"
+    >
+      Enfócame (malo)
+    </button>
+
+    <div
+      class="wcag-panel"
+      [attr.id]="idPrefix + '-wcag-3-2-1-panel-inacc'"
+      [hidden]="!isPanelOpen(idPrefix + '-wcag-3-2-1-panel-inacc')"
+    >
+      <p class="wcag-panel-title"><strong>Panel mostrado por foco</strong></p>
+      <p class="wcag-panel-body">Aparece solo por recibir foco, sin que el usuario lo haya activado.</p>
+    </div>
+
+    <div class="wcag-example-note">
+      Problema: al recibir foco se produce un cambio de contexto (aparece contenido) sin acción explícita del usuario.
+    </div>
   </div>
 </ng-template>
 
 <ng-template wcagCaseTemplate="wcag-3-2-1/accessible" let-idPrefix="idPrefix">
   <div class="wcag-example case-wcag-3-2-1-acc">
-    <label class="wcag-label" [attr.for]="idPrefix + '-coupon'">Cupón</label>
-    <input [attr.id]="idPrefix + '-coupon'" placeholder="Ej: DESCUENTO10" />
-    <button type="button" class="wcag-primary">Aplicar</button>
+    <button
+      type="button"
+      class="wcag-primary"
+      [attr.id]="idPrefix + '-wcag-3-2-1-toggle'"
+      [attr.aria-controls]="idPrefix + '-wcag-3-2-1-panel-acc'"
+      [attr.aria-expanded]="isPanelOpen(idPrefix + '-wcag-3-2-1-panel-acc')"
+      (click)="togglePanel(idPrefix + '-wcag-3-2-1-panel-acc')"
+    >
+      Mostrar panel (activar)
+    </button>
+
+    <div
+      class="wcag-panel"
+      [attr.id]="idPrefix + '-wcag-3-2-1-panel-acc'"
+      role="region"
+      [attr.aria-labelledby]="idPrefix + '-wcag-3-2-1-toggle'"
+      [hidden]="!isPanelOpen(idPrefix + '-wcag-3-2-1-panel-acc')"
+    >
+      <p class="wcag-panel-title"><strong>Panel mostrado por activación</strong></p>
+      <p class="wcag-panel-body">Aparece solo cuando activas el botón.</p>
+    </div>
+
   </div>
 </ng-template>
 
 <!-- 3.2.2 Al ingresar datos -->
-<ng-template wcagCaseTemplate="wcag-3-2-2/inaccessible">
-  <div class="wcag-example case-wcag-3-2-2-inacc">
-    <pre class="code"><code>&lt;select onchange=&quot;location.href=this.value&quot;&gt;...&lt;/select&gt;</code></pre>
+<ng-template wcagCaseTemplate="wcag-3-2-2/inaccessible" let-idPrefix="idPrefix">
+  <div class="wcag-example case-wcag-3-2-2-inacc" *ngIf="ensureDataEntryDemo(idPrefix, 'inaccessible')">
+    <label class="wcag-label" [attr.for]="idPrefix + '-wcag-3-2-2-inacc-input'">Dato</label>
+    <input
+      #inaccInput
+      [attr.id]="idPrefix + '-wcag-3-2-2-inacc-input'"
+      type="text"
+      placeholder="Escribe algo"
+      (blur)="onDataEntryBlur(idPrefix, 'inaccessible', inaccInput.value)"
+    />
+
+    <button type="button" class="wcag-primary">Enviar</button>
+
+    <div
+      class="wcag-panel"
+      [attr.id]="idPrefix + '-wcag-3-2-2-panel-inacc'"
+      [hidden]="!isPanelOpen(idPrefix + '-wcag-3-2-2-panel-inacc')"
+    >
+      <p class="wcag-panel-title"><strong>Enviado automáticamente</strong></p>
+      <p class="wcag-panel-body">Datos enviados: {{ getDataEntryValue(idPrefix, 'inaccessible') || '(vacío)' }}</p>
+    </div>
+
+    <div class="wcag-example-note">
+      Problema: al interactuar con el input y avanzar al siguiente (blur) se envían los datos sin que el usuario lo haya solicitado.
+    </div>
   </div>
 </ng-template>
 
 <ng-template wcagCaseTemplate="wcag-3-2-2/accessible" let-idPrefix="idPrefix">
-  <div class="wcag-example case-wcag-3-2-2-acc">
-    <label class="wcag-label" [attr.for]="idPrefix + '-lang'">Idioma</label>
-    <select [attr.id]="idPrefix + '-lang'">
-      <option value="es">Español</option>
-      <option value="en">English</option>
-    </select>
-    <button type="button" class="wcag-primary">Cambiar idioma</button>
+  <div class="wcag-example case-wcag-3-2-2-acc" *ngIf="ensureDataEntryDemo(idPrefix, 'accessible')">
+    <label class="wcag-label" [attr.for]="idPrefix + '-wcag-3-2-2-acc-input'">Dato</label>
+    <input
+      #accInput
+      [attr.id]="idPrefix + '-wcag-3-2-2-acc-input'"
+      type="text"
+      placeholder="Escribe algo"
+    />
+
+    <button
+      type="button"
+      class="wcag-primary"
+      [attr.id]="idPrefix + '-wcag-3-2-2-submit'"
+      [attr.aria-controls]="idPrefix + '-wcag-3-2-2-panel-acc'"
+      [attr.aria-expanded]="isPanelOpen(idPrefix + '-wcag-3-2-2-panel-acc')"
+      (click)="onDataEntrySubmit(idPrefix, accInput.value)"
+    >
+      Enviar
+    </button>
+
+    <div
+      class="wcag-panel"
+      [attr.id]="idPrefix + '-wcag-3-2-2-panel-acc'"
+      role="region"
+      [attr.aria-labelledby]="idPrefix + '-wcag-3-2-2-submit'"
+      [hidden]="!isPanelOpen(idPrefix + '-wcag-3-2-2-panel-acc')"
+    >
+      <p class="wcag-panel-title"><strong>Enviado por activación</strong></p>
+      <p class="wcag-panel-body">Datos enviados: {{ getDataEntryValue(idPrefix, 'accessible') || '(vacío)' }}</p>
+    </div>
+
+    <div class="wcag-example-note">
+        El uso de role <strong>region</strong> y aria-labelledby conecta el panel con el botón que lo controla, proporcionando un contexto claro para los usuarios de AT.
+      El panel solo aparece cuando el usuario activa explícitamente el botón.
+    </div>
   </div>
 </ng-template>
 
@@ -943,44 +1287,70 @@
   <div class="wcag-example case-wcag-3-2-3-inacc">
     <div class="nav-sample">
       <strong>Página A</strong>
-      <nav>
-        <a href="/inicio">Inicio</a>
-        <a href="/productos">Productos</a>
-        <a href="/contacto">Contacto</a>
+      <nav class="nav-links nav-links--tight" aria-label="Navegación">
+        <a class="nav-link nav-link--small" href="/inicio">Inicio</a>
+        <a class="nav-link nav-link--small" href="/productos">Productos</a>
+        <a class="nav-link nav-link--small" href="/contacto">Contacto</a>
       </nav>
     </div>
     <div class="nav-sample" style="margin-top: 10px;">
       <strong>Página B</strong>
-      <nav>
-        <a href="/productos">Productos</a>
-        <a href="/inicio">Inicio</a>
+      <nav class="nav-links nav-links--tight" aria-label="Navegación">
+        <a class="nav-link nav-link--small" href="/productos">Productos</a>
+        <a class="nav-link nav-link--small" href="/inicio">Inicio</a>
       </nav>
+    </div>
+
+    <div class="wcag-example-note">
+      Problema: la navegación no es consistente entre páginas y además los links tienen un área clicable muy pequeña y con poco espacio entre elementos.
     </div>
   </div>
 </ng-template>
 
 <ng-template wcagCaseTemplate="wcag-3-2-3/accessible">
   <div class="wcag-example case-wcag-3-2-3-acc">
-    <nav>
-      <a href="/inicio">Inicio</a>
-      <a href="/productos">Productos</a>
-      <a href="/contacto">Contacto</a>
-    </nav>
+    <div class="nav-sample">
+      <strong>Página A</strong>
+      <nav class="nav-links nav-links--spacious" aria-label="Navegación">
+        <a class="nav-link nav-link--target" href="/inicio">Inicio</a>
+        <a class="nav-link nav-link--target" href="/productos">Productos</a>
+        <a class="nav-link nav-link--target" href="/contacto">Contacto</a>
+      </nav>
+    </div>
+
+    <div class="nav-sample" style="margin-top: 10px;">
+      <strong>Página B</strong>
+      <nav class="nav-links nav-links--spacious" aria-label="Navegación">
+        <a class="nav-link nav-link--target" href="/inicio">Inicio</a>
+        <a class="nav-link nav-link--target" href="/productos">Productos</a>
+        <a class="nav-link nav-link--target" href="/contacto">Contacto</a>
+      </nav>
+    </div>
+
+    <div class="wcag-example-note">
+        Minimo area clicable de 24x24px por link, con espacio entre elementos para evitar clics accidentales.
+         La navegación es consistente entre páginas, con los mismos links en el mismo orden y estilo.
+    </div>
   </div>
 </ng-template>
 
 <!-- 3.2.4 Identificación consistente -->
 <ng-template wcagCaseTemplate="wcag-3-2-4/inaccessible">
   <div class="wcag-example case-wcag-3-2-4-inacc">
-    <button type="button" aria-label="Buscar">🔎</button>
-    <button type="button" aria-label="Ir" style="margin-left: 8px;">🔎</button>
+    <span>
+        <button type="button" aria-label="Buscar">🔎</button>
+        <button type="button" aria-label="Ir">🔎</button>
+
+    </span>
   </div>
 </ng-template>
 
 <ng-template wcagCaseTemplate="wcag-3-2-4/accessible">
   <div class="wcag-example case-wcag-3-2-4-acc">
-    <button type="button" aria-label="Buscar">🔎</button>
-    <button type="button" aria-label="Buscar" style="margin-left: 8px;">🔎</button>
+    <span>
+        <button type="button" aria-label="Buscar">🔎</button>
+        <button type="button" aria-label="Ir">➤</button>
+    </span>
   </div>
 </ng-template>
 

@@ -65,7 +65,7 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
   },
   {
     id: 'wcag-2-1-1',
-    criterion: '2.1.1', //TODO: agregar un efecto click al mouse para mostrar que mouse funciona y por teclado no
+    criterion: '2.1.1',
     pillar: 'operable',
     name: 'Teclado',
     important: true,
@@ -78,7 +78,7 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
     id: 'wcag-2-4-1',
     criterion: '2.4.1',
     pillar: 'operable',
-    name: 'Saltar contenido', //TODO: poner skip to main antes de elnaces
+    name: 'Saltar contenido',
     description:
       'Debe existir un mecanismo para saltarse bloques de contenido repetitivo.',
     explanation:
@@ -86,7 +86,7 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
   },
   {
     id: 'wcag-2-4-4',
-    criterion: '2.4.4', //TODO: cambiar por clica aqui, y accesible poner click aqui para ir a xxxx
+    criterion: '2.4.4',
     pillar: 'operable',
     name: 'Propósito del enlace',
     description:
@@ -96,7 +96,7 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
   },
   {
     id: 'wcag-2-4-6',
-    criterion: '2.4.6', // TODO: agregar ejemplo de un input sin label vs otro con label, explicarlo
+    criterion: '2.4.6',
     pillar: 'operable',
     name: 'Encabezados y etiquetas',
     important: true,
@@ -104,16 +104,6 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
       'Los encabezados y etiquetas deben ser descriptivos y cumplir una jerarquía clara.',
     explanation:
       'Usar una jerarquía H1 → H2 → H3 permite a los lectores de pantalla navegar la estructura.',
-  },
-  {
-    id: 'wcag-2-5-3',
-    criterion: '2.5.3', //TODO: remover
-    pillar: 'operable',
-    name: 'Etiqueta en el nombre',
-    description:
-      'Para componentes con etiqueta visual, el nombre accesible debe incluir la etiqueta visible.',
-    explanation:
-      'La etiqueta visual y el nombre accesible deben coincidir para evitar confusión.',
   },
   {
     id: 'wcag-3-3-1',
@@ -243,27 +233,17 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
   },
   {
     id: 'wcag-2-1-2',
-    criterion: '2.1.2', //TODO: no accesible, cancelar el movimiento de teclado
+    criterion: '2.1.2',
     pillar: 'operable',
-    name: 'Sin trampas de teclado', //TODO: agrega mas de un contenido, para mostrar el movimiento atrapado vs libre
+    name: 'Sin trampas de teclado',
     description:
       'Si el foco entra en un componente, el usuario debe poder salir usando teclado (Tab/Shift+Tab/Escape) sin quedarse “atrapado”.',
     explanation:
       'Los diálogos deben ofrecer una forma clara de cierre (botón y Escape) y no interceptar Tab de forma que impida abandonar el componente.',
   },
   {
-    id: 'wcag-2-1-4',
-    criterion: '2.1.4', //TODO: quitar
-    pillar: 'operable',
-    name: 'Atajos de teclado (tecla única)',
-    description:
-      'Los atajos activados por una sola tecla deben poder desactivarse, reasignarse o requerir modificadores para evitar activaciones accidentales.',
-    explanation:
-      'Evitar teclas únicas reduce activaciones no intencionales (p. ej., dictado, lectores de pantalla, temblores). Añadir control de habilitado mejora accesibilidad.',
-  },
-  {
     id: 'wcag-2-2-1',
-    criterion: '2.2.1', //TODO: visualizar mejor el ejemplo
+    criterion: '2.2.1',
     pillar: 'operable',
     name: 'Tiempo ajustable',
     important: true,
@@ -274,7 +254,7 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
   },
   {
     id: 'wcag-2-2-2',
-    criterion: '2.2.2', //TODO: visualmente mostrar que pausa para animacion
+    criterion: '2.2.2',
     pillar: 'operable',
     name: 'Pausar, detener, ocultar (carruseles/animaciones)',
     important: true,
@@ -285,7 +265,7 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
   },
   {
     id: 'wcag-2-3-1',
-    criterion: '2.3.1', //TODO:reducir el flash vs reducirlo mas aun
+    criterion: '2.3.1',
     pillar: 'operable',
     name: 'Convulsiones y reacciones físicas (flashes)',
     description:
@@ -294,18 +274,8 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
       'Evitar flashes rápidos reduce riesgos para usuarios con epilepsia fotosensible y mejora la comodidad visual general.',
   },
   {
-    id: 'wcag-2-4-2',
-    criterion: '2.4.2', //TODO: quitar
-    pillar: 'operable',
-    name: 'Página titulada',
-    description:
-      'Las páginas deben tener títulos descriptivos que comuniquen el tema o propósito (p. ej., en <title>).',
-    explanation:
-      'Un título claro ayuda a usuarios de lectores de pantalla, historial y pestañas a ubicarse y navegar entre páginas.',
-  },
-  {
     id: 'wcag-2-4-3',
-    criterion: '2.4.3', //TODO: no funciona por no estar alislado 
+    criterion: '2.4.3',
     pillar: 'operable',
     name: 'Orden del foco',
     important: true,
@@ -316,7 +286,7 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
   },
   {
     id: 'wcag-2-4-5',
-    criterion: '2.4.5', //TODO: descatar la importancia del concepto en si
+    criterion: '2.4.5',
     pillar: 'operable',
     name: 'Múltiples vías de navegación',
     description:
@@ -326,9 +296,9 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
   },
   {
     id: 'wcag-2-4-7',
-    criterion: '2.4.7', //TODO: explicar que no tiene foco a proposito, mostrar focus trapping con un modal y role dialog
+    criterion: '2.4.7',
     pillar: 'operable',
-    name: 'Enfoque visible', //TODO: movimiento del foco al eliminar o agregar el contenido
+    name: 'Enfoque visible',
     important: true,
     description:
       'Los elementos enfocables deben mostrar un indicador de foco visible al navegar con teclado.',
@@ -337,63 +307,28 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
   },
   {
     id: 'wcag-2-5-1',
-    criterion: '2.5.1', //TODO: permitir arrastrar el conteido no accesible, accesible permitir arrastrar y ademas hacer que las flechas muevan el conteido
+    criterion: '2.5.1',
     pillar: 'operable',
-    name: 'Gestos con puntero', //TODO: en mobile banner cambia de slides, pero que tambien hayan flechas
+    name: 'Gestos con puntero',
     description:
       'Las funciones que requieran gestos complejos (arrastrar, pellizcar) deben tener alternativa con gestos simples o controles.',
     explanation:
       'Una alternativa por botones permite operar sin gestos complejos y es útil con teclado, switch control y movilidad reducida.',
   },
   {
-    id: 'wcag-2-5-2',
-    criterion: '2.5.2', //TODO: quitar
-    pillar: 'operable',
-    name: 'Cancelación del puntero',
-    description:
-      'Para interacciones con puntero, las acciones deben activarse en “up” o permitir cancelar/revertir si se inicia accidentalmente.',
-    explanation:
-      'Activar en click (pointerup) y/o confirmar evita acciones accidentales al tocar o arrastrar el puntero.',
-  },
-  {
-    id: 'wcag-2-5-4',
-    criterion: '2.5.4', //TODO: quitar
-    pillar: 'operable',
-    name: 'Activación por movimiento',
-    description:
-      'Las funciones activadas por movimiento del dispositivo (p. ej., agitar) deben tener alternativa y poder desactivarse.',
-    explanation:
-      'Una alternativa por botón y la posibilidad de desactivar movimiento evita activaciones involuntarias y mejora accesibilidad motora.',
-  },
-
-  // =========================
-  // COMPRENSIBILIDAD (faltantes)
-  // =========================
-  {
     id: 'wcag-3-1-1',
-    criterion: '3.1.1', //TODO nota, cambiar cada vez que cambiamos el idioma
+    criterion: '3.1.1',
     pillar: 'comprensible',
-    name: 'Idioma de la página',
+    name: 'Idioma de la página + idioma de partes',
     important: true,
     description:
-      'El idioma principal de la página debe estar definido para que lectores de pantalla usen pronunciación adecuada.',
+      '3.1.1 / 3.1.2 El idioma principal debe definirse y los cambios de idioma dentro del contenido deben marcarse programáticamente.',
     explanation:
-      'Definir lang mejora pronunciación, selección de voz y diccionarios en tecnologías asistivas.',
-  },
-  {
-    id: 'wcag-3-1-2',
-    criterion: '3.1.2', //TODO: juntar a 3.1.1
-    pillar: 'comprensible',
-    name: 'Idioma de partes', //TODO: nota paraque se entienda atributo lang
-    important: true,
-    description:
-      'Los cambios de idioma dentro del contenido deben marcarse programáticamente para una lectura correcta.',
-    explanation:
-      'Marcar el idioma de frases extranjeras evita pronunciación incorrecta y mejora comprensión en lectores de pantalla.',
+      'Definir lang en el contenedor principal ayuda a pronunciación y selección de voz. Para frases en otro idioma, usa lang en ese fragmento (p. ej. <span lang="en">...</span>) para evitar pronunciación incorrecta.',
   },
   {
     id: 'wcag-3-2-1',
-    criterion: '3.2.1', //TODO: ejempl malo, boton que activa algo en foco, cambiar
+    criterion: '3.2.1',
     pillar: 'comprensible',
     name: 'Al recibir foco',
     description:
@@ -403,7 +338,7 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
   },
   {
     id: 'wcag-3-2-2',
-    criterion: '3.2.2', //TODO: input y datos enviaron, vs el input y el boton de enviar
+    criterion: '3.2.2',
     pillar: 'comprensible',
     name: 'Al ingresar datos',
     description:

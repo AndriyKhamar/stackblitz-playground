@@ -1,12 +1,82 @@
 label {
     font-weight: 500;
     margin-right: 10px;
+
+    input {
+        margin-top: 6px;
+    }
 }
 
 .wcag-example {
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  
+  /* Unified interactive control styling (buttons + button-like elements) */
+  button,
+  [role='button'] {
+    appearance: none;
+    -webkit-appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 2px solid #1557b0;
+    background: #1a73e8;
+    color: #fff;
+    font: inherit;
+    font-weight: 500;
+    line-height: 1.15;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.18);
+    transition: transform 80ms ease, box-shadow 120ms ease, background 120ms ease, border-color 120ms ease;
+  }
+  
+  button:hover,
+  [role='button']:hover {
+    background: #1557b0;
+    border-color: #0f3f80;
+  }
+  
+  button:active,
+  [role='button']:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
+  }
+  
+  button:focus,
+  [role='button']:focus {
+  
+      --wcag-action-bg: #ffffff;
+      --wcag-action-fg: #111827;
+      --wcag-action-border: #cbd5e1;
+      --wcag-action-shadow: 0 1px 2px rgba(16, 24, 40, 0.12);
+      --wcag-action-hover-bg: #f8fafc;
+      --wcag-action-active-bg: #eef2ff;
+      --wcag-action-focus: #111827;
+    outline: 3px solid #ffbf47;
+    outline-offset: 2px;
+  }
+  
+  button:focus:not(:focus-visible),
+  [role='button']:focus:not(:focus-visible) {
+    outline: none;
+  }
+  
+  button:focus-visible,
+  [role='button']:focus-visible {
+    outline: 3px solid #ffbf47;
+    outline-offset: 2px;
+  }
+[role='button'],
+    button.no-outline:focus,.no-outline:focus-visible {
+    outline: none;
+}
 }
 
 .wcag-example-note {
@@ -17,6 +87,133 @@ label {
   background: #f6f8fa;
   color: #374151;
   line-height: 1.4;
+}
+
+/* 2.5.1 pointer gesture swap */
+.pointer-swap__actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.pointer-swap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  max-width: 620px;
+}
+
+.pointer-swap__slot {
+  min-height: 92px;
+}
+
+.pointer-swap__item {
+  border: 2px dashed #94a3b8;
+  border-radius: 12px;
+  padding: 12px;
+  background: #ffffff;
+  cursor: grab;
+  user-select: none;
+}
+
+.pointer-swap__item--a {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.pointer-swap__item--b {
+  border-color: #16a34a;
+  background: #f0fdf4;
+}
+
+.pointer-swap__item:active {
+  cursor: grabbing;
+}
+
+.pointer-swap__title {
+  font-weight: 800;
+  color: #111827;
+}
+
+.pointer-swap__hint {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+/* 3.1.1 / 3.1.2 language demo */
+.lang-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lang-demo__select {
+  max-width: 240px;
+  padding: 10px 12px;
+  border: 1px solid #999;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.lang-demo__preview {
+  max-width: 620px;
+  width: 100%;
+  border: 1px solid #d0d7de;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 10px 12px;
+}
+
+/* 3.2.3 consistent navigation (and target size/spacing demo) */
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.nav-links--tight {
+  gap: 2px;
+}
+
+.nav-links--spacious {
+  gap: 12px;
+}
+
+.nav-link {
+  color: #1a73e8;
+  text-decoration: underline;
+}
+
+/* Make the hit area intentionally too small */
+.nav-link--small {
+  display: inline-block;
+  padding: 2px 4px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* Enforce a minimum target size and spacing-friendly padding */
+.nav-link--target {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  text-decoration: underline;
+}
+
+.nav-link--target:hover {
+  background: #dbeafe;
+}
+
+.nav-link--target:focus-visible {
+  outline: 3px solid #ffbf47;
+  outline-offset: 2px;
 }
 
 .wcag-example-note:last-child {
@@ -53,15 +250,11 @@ label {
 }
 
 .wcag-subexample {
-  margin-top: 14px;
-  padding-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   border-top: 2px dashed #cfcfcf69;
-}
-
-.wcag-subexample--first {
-  margin-top: 0;
-  padding-top: 0;
-  border-top: 0;
+  padding-top: 10px;
 }
 
 .wcag-panel {
@@ -111,16 +304,7 @@ label {
   font-size: 0.9rem;
 }
 
-.wcag-primary {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding: 10px 12px;
-  border: 0;
-  border-radius: 8px;
-  background: #1a73e8;
-  color: #fff;
-  font-weight: 800;
-}
+
 
 .wcag-error {
   display: inline-block;
@@ -323,40 +507,22 @@ video {
   }
 }
 
-/* 1.4.11 */
+.case-wcag-1-4-11-inacc {
+    .btn.weak {
+        border: 1px solid #e6e6e6;
+        background: #fff;
+        color: #555;
+        box-shadow: none;
+        font-weight: normal;
+    }
+}
+
 .panel {
   padding: 14px;
   border-radius: 12px;
   background: #fff;
   border: 1px solid #eee;
   max-width: 520px;
-}
-
-.btn {
-  background: #ffffff;
-  color: #222;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-weight: 800;
-}
-
-.btn.weak {
-  border: 1px solid #e6e6e6;
-}
-
-.btn.strong {
-    &:hover {
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-      background-color: #0f3f80;
-    }
-  background-color: #1a73e8;
-  color: #ffffff;
-  border: 2px solid #555;
-}
-
-.btn:focus {
-  outline: 3px solid #0066cc;
-  outline-offset: 3px;
 }
 
 /* 1.4.12 */
@@ -421,11 +587,24 @@ video {
 
 /* 2.1.2 dialog */
 .dialog {
+  position: relative;
   border: 1px solid #ddd;
   border-radius: 12px;
   padding: 12px;
   background: #fff;
   max-width: 520px;
+}
+
+.dialog__close-x {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 10px;
+  font-size: 22px;
+  line-height: 1;
 }
 
 .trap {
@@ -450,13 +629,17 @@ video {
   padding: 10px;
   border-radius: 10px;
   background: #f3f3f3;
+  min-width: 100px;
+  min-height: 100px;
+  text-align: center;
+  justify-content: center;
 }
 
 /* 2.3.1 flash */
 .flash {
   padding: 12px;
   border-radius: 10px;
-  animation: wcagFlash 0.1s infinite;
+  animation: wcagFlash 0.2s infinite;
 }
 
 @keyframes wcagFlash {
@@ -477,11 +660,8 @@ video {
   background: #fff;
   transition: background 0.4s ease;
   border: 1px solid #ddd;
-}
+    animation: wcagFlash 1s infinite;
 
-/* 2.4.7 focus visible */
-.no-outline:focus {
-  outline: none;
 }
 
 .yes-outline:focus {
@@ -499,6 +679,12 @@ video {
   display: inline-flex;
   gap: 8px;
   flex-wrap: wrap;
+}
+.carousel-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
 }
 
 .toggle {
@@ -536,6 +722,7 @@ kbd {
   .layout {
     display: flex;
     gap: 10px;
+    align-self: stretch;
   }
 
   .box {
@@ -546,7 +733,7 @@ kbd {
   }
 
   .sidebar {
-    flex: 0 0 35%;
+    flex: 0 0 15%;
   }
 
   .main {
@@ -622,49 +809,29 @@ kbd {
   }
 }
 
-/* 2.1.1 Teclado */
-.case-wcag-2-1-1-inacc {
-  .fake-click {
-    display: inline-block;
-    padding: 10px 12px;
-    border-radius: 6px;
-    background: #1a73e8;
-    color: #fff;
-    cursor: pointer;
-    user-select: none;
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.18);
-    transition: transform 80ms ease, box-shadow 120ms ease, background 120ms ease;
-  }
-
-  .fake-click:active {
-    transform: translateY(1px);
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
-    background: #1557b0;
-  }
+.wcag-click-note {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #1557b0;
+  background: #e6f2ff;
+  color: #111827;
+  font-size: 0.9rem;
+  font-weight: 400;
 }
 
-.case-wcag-2-1-1-acc {
-  button {
-    padding: 10px 12px;
-    border-radius: 6px;
-  }
-
-  .fake-button {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 10px 12px;
-    border-radius: 6px;
-    background: #1a73e8;
-    color: #fff;
-    user-select: none;
-  }
-
-  .fake-button:focus {
-    outline: 3px solid #ffbf47;
-    outline-offset: 2px;
-  }
+/* 2.1.2 modal backdrop */
+.wcag-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(17, 24, 39, 0.55);
 }
-
 /* 2.4.1 Saltar contenido */
 .case-wcag-2-4-1-acc {
   position: relative;
