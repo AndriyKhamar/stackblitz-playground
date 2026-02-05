@@ -104,17 +104,16 @@
               </div>
 
               <div class="code-section" *ngIf="isCodeRevealed(wcagCase.id)" aria-label="Código fuente del ejemplo">
-                <h3 class="code-title">Código (fuente)</h3>
-                <p class="code-hint">Se muestra el marcado del template (puede incluir bindings tipo <strong>[attr.id]</strong>).</p>
+                <h3 class="code-title">Código fuente</h3>
 
                 <div class="code-grid" [class.single-column]="!isSolutionRevealed(wcagCase.id)">
                   <div class="code-block inaccessible">
-                    <h4>❌ No Accesible (código)</h4>
+                    <h4>❌ No Accesible</h4>
                     <pre><code [textContent]="getTemplateCode(wcagCase.inaccessibleTemplateKey)"></code></pre>
                   </div>
 
                   <div class="code-block accessible" *ngIf="isSolutionRevealed(wcagCase.id)">
-                    <h4>✅ Accesible (código)</h4>
+                    <h4>✅ Accesible</h4>
                     <pre><code [textContent]="getTemplateCode(wcagCase.accessibleTemplateKey)"></code></pre>
                   </div>
                 </div>
