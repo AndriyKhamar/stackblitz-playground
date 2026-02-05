@@ -107,14 +107,14 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
   },
   {
     id: 'wcag-3-3-1',
-    criterion: '3.3.1', //TODO: simular el formulario con foco al error, explicar movimiento del foco al error
+    criterion: '3.3.1', 
     pillar: 'comprensible',
     name: 'Identificación de errores',
     important: true,
     description:
       'Los errores deben ser identificados automáticamente y sugerencias de corrección.',
     explanation:
-      'Usar role="alert" y aria-describedby para informar de errores de forma accesible.',
+      'Se recomienda usar role="alert" y aria-describedby para informar de errores de forma accesible.',
   },
   {
     id: 'wcag-3-3-2',
@@ -129,7 +129,7 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
   },
   {
     id: 'wcag-4-1-2',
-    criterion: '4.1.2', //TODO: agregar mejor ejemplo, 1º un boton que simula comportamiento de checkbox, componentes con rol modificado, representar semantica y aria correctos
+    criterion: '4.1.2',
     pillar: 'robusto',
     name: 'Nombre, rol y valor',
     important: true,
@@ -368,7 +368,7 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
   },
   {
     id: 'wcag-3-3-3',
-    criterion: '3.3.3', //TODO: como sugerencia formato de fecha
+    criterion: '3.3.3',
     pillar: 'comprensible',
     name: 'Sugerencias ante errores',
     important: true,
@@ -378,22 +378,8 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
       'Indicar qué falta (no solo “inválido”) acelera la corrección y reduce frustración, especialmente en formularios complejos.',
   },
   {
-    id: 'wcag-3-3-4',
-    criterion: '3.3.4', //TODO: quitar
-    pillar: 'comprensible',
-    name: 'Prevención de errores (legal/financiero/datos)',
-    description:
-      'En acciones críticas (compras, transferencias, envío definitivo), se debe permitir revisar, corregir y confirmar antes de finalizar.',
-    explanation:
-      'Un paso de revisión y posibilidad de corrección previene errores costosos, ayudando a usuarios con dificultades cognitivas o de atención.',
-  },
-
-  // =========================
-  // ROBUSTEZ (faltantes)
-  // =========================
-  {
     id: 'wcag-4-1-1',
-    criterion: '4.1.1', //TODO: mostrar mas ejemplos de html malo vs bueno
+    criterion: '4.1.1',
     pillar: 'robusto',
     name: 'Análisis (HTML bien formado)',
     important: true,
@@ -403,8 +389,8 @@ const WCAG_CASES_RAW: WCAGCaseRaw[] = [
       'HTML mal formado o IDs duplicados rompen relaciones (label/for, aria-describedby) y generan comportamientos impredecibles en AT.',
   },
   {
-    id: 'wcag-4-1-3', //TODO: hablar sobre la comunicacion de los cambios de estado
-    criterion: '4.1.3', //TODO: agregar mecanismo para cambiar status iterando, agregar role alert
+    id: 'wcag-4-1-3',
+    criterion: '4.1.3',
     pillar: 'robusto',
     name: 'Mensajes de estado',
     important: true,

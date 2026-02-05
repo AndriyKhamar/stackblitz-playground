@@ -327,63 +327,209 @@
 
 <!-- 3.3.1 Identificación de errores -->
 <ng-template wcagCaseTemplate="wcag-3-3-1/inaccessible" let-idPrefix="idPrefix">
-  <div class="wcag-example wcag-form-demo case-wcag-3-3-1-inacc">
+  <div class="wcag-example wcag-form-demo case-wcag-3-3-1-inacc" *ngIf="ensureErrorIdentificationDemo(idPrefix, 'inaccessible')">
     <div class="wcag-field">
-      <input type="email" [attr.id]="idPrefix + '-email'" placeholder="Correo" />
-      <button type="button" class="wcag-primary">Enviar</button>
-      <p class="wcag-example-note">Sin validación ni mensaje de error accesible.</p>
+      <label class="wcag-label" [attr.for]="idPrefix + '-wcag-3-3-1-inacc-email'">Correo</label>
+      <input
+        #inaccEmail
+        type="email"
+        [attr.id]="idPrefix + '-wcag-3-3-1-inacc-email'"
+        placeholder="usuario@ejemplo.com"
+        [class.wcag-input--error]="isErrorIdentificationFormInvalid(idPrefix, 'inaccessible')"
+      />
+
+      <label class="wcag-label" [attr.for]="idPrefix + '-wcag-3-3-1-inacc-tel'">Teléfono</label>
+      <input
+        #inaccTel
+        type="tel"
+        [attr.id]="idPrefix + '-wcag-3-3-1-inacc-tel'"
+        placeholder="123-123-1234"
+        [class.wcag-input--error]="isErrorIdentificationFormInvalid(idPrefix, 'inaccessible')"
+      />
+
+      <div
+        *ngIf="isErrorIdentificationFormInvalid(idPrefix, 'inaccessible')"
+        class="wcag-validation-error"
+      >
+        Error: revisa los datos ingresados.
+      </div>
+
+      <button
+        type="button"
+        class="wcag-primary"
+        [attr.id]="idPrefix + '-wcag-3-3-1-inacc-submit'"
+        (click)="onErrorIdentificationSubmit(idPrefix, 'inaccessible', inaccEmail.value, inaccTel.value, $event)"
+      >
+        Enviar
+      </button>
+
+
     </div>
+      <div class="wcag-example-note">
+        Problema: error solo visual y genérico (no explica qué pasó ni cómo corregirlo). El foco se queda en “Enviar”.
+      </div>
   </div>
 </ng-template>
 
 <ng-template wcagCaseTemplate="wcag-3-3-1/accessible" let-idPrefix="idPrefix">
-  <div class="wcag-example wcag-form-demo case-wcag-3-3-1-acc">
+  <div class="wcag-example wcag-form-demo case-wcag-3-3-1-acc" *ngIf="ensureErrorIdentificationDemo(idPrefix, 'accessible')">
     <div class="wcag-field">
-      <label class="wcag-label" [attr.for]="idPrefix + '-email'">Correo:</label>
+      <label class="wcag-label" [attr.for]="idPrefix + '-wcag-3-3-1-acc-email'">Correo</label>
       <input
+        #accEmail
         type="email"
         required
-        [attr.id]="idPrefix + '-email'"
-        [attr.aria-describedby]="idPrefix + '-email-error'"
-        aria-invalid="true"
+        [attr.id]="idPrefix + '-wcag-3-3-1-acc-email'"
+        placeholder="usuario@ejemplo.com"
+        [class.wcag-input--error]="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'email')"
+        [attr.aria-invalid]="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'email') ? 'true' : null"
+        [attr.aria-describedby]="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'email') ? (idPrefix + '-wcag-3-3-1-acc-email-error') : null"
+        (input)="clearErrorIdentificationFieldError(idPrefix, 'accessible', 'email')"
       />
-      <span
-        class="wcag-error"
-        [attr.id]="idPrefix + '-email-error'"
+
+      <div
+        *ngIf="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'email')"
+        class="wcag-validation-error"
+        [attr.id]="idPrefix + '-wcag-3-3-1-acc-email-error'"
         role="alert"
-      >Ingrese un correo válido (ej: usuario@ejemplo.com)</span>
+      >
+        <strong>Correo requerido.</strong> Ingresa una dirección válida (ej: <em>usuario@ejemplo.com</em>).
+      </div>
+
+      <label class="wcag-label" [attr.for]="idPrefix + '-wcag-3-3-1-acc-tel'">Teléfono</label>
+      <input
+        #accTel
+        type="tel"
+        required
+        [attr.id]="idPrefix + '-wcag-3-3-1-acc-tel'"
+        placeholder="123-123-1234"
+        [class.wcag-input--error]="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'phone')"
+        [attr.aria-invalid]="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'phone') ? 'true' : null"
+        [attr.aria-describedby]="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'phone') ? (idPrefix + '-wcag-3-3-1-acc-tel-error') : null"
+        (input)="clearErrorIdentificationFieldError(idPrefix, 'accessible', 'phone')"
+      />
+
+      <div
+        *ngIf="isErrorIdentificationFieldErrorVisible(idPrefix, 'accessible', 'phone')"
+        class="wcag-validation-error"
+        [attr.id]="idPrefix + '-wcag-3-3-1-acc-tel-error'"
+        role="alert"
+      >
+        <strong>Teléfono requerido.</strong> Ingresa un número de teléfono (ej: <em>123-123-1234</em>).
+      </div>
+
+      <button
+        type="button"
+        class="wcag-primary"
+        [attr.id]="idPrefix + '-wcag-3-3-1-acc-submit'"
+        (click)="onErrorIdentificationSubmit(idPrefix, 'accessible', accEmail.value, accTel.value, $event)"
+      >
+        Enviar
+      </button>
     </div>
+      <div class="wcag-example-note">
+        <ul>
+            <li>Cada error debe ser descriptivo y especifico para que el usuario pueda entender qué salió mal y cómo corregirlo.</li>
+            <li> El foco se mantiene en el campo con error para facilitar su corrección.</li>
+            <li>El uso de <strong>aria-invalid</strong> comunica que el campo tiene un error, y <strong>aria-describedby</strong> vincula el campo con un mensaje de error específico. El mensaje de error tiene role="alert" para asegurar que sea anunciado inmediatamente por los lectores de pantalla.</li>
+        </ul>
+      </div>   
   </div>
 </ng-template>
 
 <!-- 3.3.2 Etiquetas o instrucciones -->
 <ng-template wcagCaseTemplate="wcag-3-3-2/inaccessible">
   <div class="wcag-example wcag-form-demo case-wcag-3-3-2-inacc">
-    <input type="text" placeholder="(sin etiqueta)" />
+    <div class="wcag-input-icon">
+      <span class="wcag-input-icon__icon" aria-hidden="true">🔎</span>
+      <input type="text" placeholder="(sin etiqueta)" />
+    </div>
     <button type="button" class="wcag-primary">Enviar</button>
-  </div>
+        <div class="wcag-example-note">
+            Problema: sin indicaciones claras, el usuario puede no entender qué información se espera en el campo de texto, lo que dificulta su uso, especialmente para personas con discapacidades cognitivas o usuarios de lectores de pantalla.
+    </div>
+</div>
 </ng-template>
 
 <ng-template wcagCaseTemplate="wcag-3-3-2/accessible" let-idPrefix="idPrefix">
   <div class="wcag-example wcag-form-demo case-wcag-3-3-2-acc">
     <label class="wcag-label" [attr.for]="idPrefix + '-search'">Buscar en el sitio:</label>
-    <input [attr.id]="idPrefix + '-search'" type="text" placeholder="Ej: accesibilidad" />
+    <div class="wcag-input-icon">
+      <span class="wcag-input-icon__icon" aria-hidden="true">🔎</span>
+      <input [attr.id]="idPrefix + '-search'" type="text" placeholder="Ej: accesibilidad" />
+    </div>
     <button type="button" class="wcag-primary" aria-label="Buscar">Enviar</button>
   </div>
 </ng-template>
 
 <!-- 4.1.2 Nombre, rol y valor -->
-<ng-template wcagCaseTemplate="wcag-4-1-2/inaccessible">
+<ng-template wcagCaseTemplate="wcag-4-1-2/inaccessible" let-idPrefix="idPrefix">
   <div class="wcag-example case-wcag-4-1-2-inacc">
-    <div class="toggle-button">Activar</div>
-    <p class="wcag-example-note">Sin rol/estado: AT no puede interpretar el control.</p>
+    <div class="wcag-subexample wcag-subexample--first">
+      <div class="toggle-button">Activar</div>
+      <p class="wcag-example-note">Problema: parece botón, pero no expone rol ni estado a AT.</p>
+    </div>
+
+    <div class="wcag-subexample">
+      <nav class="wcag-nav">
+        <a class="wcag-nav__link wcag-nav__link--current" href="#">Inicio</a>
+        <a class="wcag-nav__link" href="#">Productos</a>
+        <a class="wcag-nav__link" href="#">Contacto</a>
+      </nav>
+      <p class="wcag-example-note">Problema: el “actual” se marca solo visualmente; AT no sabe cuál es la página actual.</p>
+    </div>
+
+    <div class="wcag-subexample">
+      <div
+        *ngIf="ensureFakeCheckboxDemo(idPrefix)"
+        class="wcag-fake-checkbox"
+        [class.wcag-fake-checkbox--checked]="isFakeCheckboxChecked(idPrefix)"
+        (click)="toggleFakeCheckbox(idPrefix)"
+      >
+        <span class="wcag-fake-checkbox__box" aria-hidden="true"></span>
+        <span>Acepto términos y condiciones</span>
+      </div>
+      <p class="wcag-example-note">Problema: no expone <strong>role</strong> ni <strong>checked</strong>; teclado/AT no lo operan como checkbox.</p>
+    </div>
   </div>
 </ng-template>
 
 <ng-template wcagCaseTemplate="wcag-4-1-2/accessible" let-idPrefix="idPrefix">
   <div class="wcag-example case-wcag-4-1-2-acc">
-    <button type="button" [attr.id]="idPrefix + '-toggle'" aria-pressed="false">Activar</button>
-    <p class="wcag-example-note">Usa <strong>button</strong> + <strong>aria-pressed</strong> para exponer estado.</p>
+    <div class="wcag-subexample wcag-subexample--first">
+      <p class="label">Botón con estado (aria-pressed)</p>
+      <button type="button" [attr.id]="idPrefix + '-toggle'" aria-pressed="false">Activar</button>
+      <p class="wcag-example-note"><strong>Button</strong> con el atributo <strong>aria-pressed</strong> exponen rol y su estado.</p>
+    </div>
+
+    <div class="wcag-subexample">
+      <p class="label">Navegación con aria-current</p>
+      <nav class="wcag-nav" aria-label="Secciones del sitio">
+        <a class="wcag-nav__link" href="#" aria-current="page">Inicio</a>
+        <a class="wcag-nav__link" href="#">Productos</a>
+        <a class="wcag-nav__link" href="#">Contacto</a>
+      </nav>
+      <p class="wcag-example-note"><strong>Aria-current</strong> identifica la ubicación pagina actual.</p>
+    </div>
+
+    <div class="wcag-subexample">
+      <p class="label">Checkbox con rol/estado (ARIA)</p>
+      <div
+        *ngIf="ensureAriaCheckboxDemo(idPrefix)"
+        class="wcag-custom-checkbox"
+        [class.wcag-custom-checkbox--checked]="isAriaCheckboxChecked(idPrefix)"
+        role="checkbox"
+        tabindex="0"
+        [attr.aria-checked]="isAriaCheckboxChecked(idPrefix) ? 'true' : 'false'"
+        [attr.aria-labelledby]="idPrefix + '-chk-label'"
+        (click)="toggleAriaCheckbox(idPrefix)"
+        (keydown)="onAriaCheckboxKeydown(idPrefix, $event)"
+      >
+        <span class="wcag-custom-checkbox__box" aria-hidden="true"></span>
+        <span [attr.id]="idPrefix + '-chk-label'">Acepto términos y condiciones</span>
+      </div>
+      <p class="wcag-example-note">El div expone <strong>role="checkbox"</strong> + <strong>aria-checked</strong> para garantizar su accesibilidad.</p>
+    </div>
   </div>
 </ng-template>
 
@@ -1337,20 +1483,25 @@
 <!-- 3.2.4 Identificación consistente -->
 <ng-template wcagCaseTemplate="wcag-3-2-4/inaccessible">
   <div class="wcag-example case-wcag-3-2-4-inacc">
-    <span>
+    <span class="panel">
         <button type="button" aria-label="Buscar">🔎</button>
         <button type="button" aria-label="Ir">🔎</button>
-
     </span>
+    <div class="wcag-example-note">
+      Problema: botones identificados unicamente por el icono con un label diferente crean confusión.
+    </div>
   </div>
 </ng-template>
 
 <ng-template wcagCaseTemplate="wcag-3-2-4/accessible">
   <div class="wcag-example case-wcag-3-2-4-acc">
-    <span>
+    <span class="panel">
         <button type="button" aria-label="Buscar">🔎</button>
         <button type="button" aria-label="Ir">➤</button>
     </span>
+    <div class="wcag-example-note">
+        Cada boton tiene que tener un label consistente con su función, evitando confusión tanto para usuarios visuales como para usuarios de AT.
+    </div>
   </div>
 </ng-template>
 
@@ -1360,6 +1511,10 @@
     <label class="wcag-label" [attr.for]="idPrefix + '-pwd'">Contraseña</label>
     <input [attr.id]="idPrefix + '-pwd'" type="password" aria-invalid="true" />
     <div class="wcag-error" role="alert">Contraseña inválida</div>
+
+    <label class="wcag-label" [attr.for]="idPrefix + '-date'">Fecha</label>
+    <input [attr.id]="idPrefix + '-date'" type="text" aria-invalid="true" />
+    <div class="wcag-error" role="alert">Fecha inválida</div>
   </div>
 </ng-template>
 
@@ -1372,53 +1527,167 @@
       aria-invalid="true"
       [attr.aria-describedby]="idPrefix + '-pwd-help ' + idPrefix + '-pwd-error'"
     />
-    <div [attr.id]="idPrefix + '-pwd-help'">Debe tener 8+ caracteres, 1 número y 1 mayúscula.</div>
-    <div [attr.id]="idPrefix + '-pwd-error'" class="wcag-error" role="alert">Falta al menos un número.</div>
-  </div>
-</ng-template>
+    <div [attr.id]="idPrefix + '-pwd-help'" class="wcag-hint wcag-hint--format">
+      Formato: 8+ caracteres, 1 número y 1 mayúscula.
+    </div>
+    <div [attr.id]="idPrefix + '-pwd-error'" class="wcag-error" role="alert">
+      <span class="wcag-error__icon" aria-hidden="true">!</span>
+      Falta al menos un número.
+    </div>
 
-<!-- 3.3.4 Prevención de errores -->
-<ng-template wcagCaseTemplate="wcag-3-3-4/inaccessible">
-  <div class="wcag-example case-wcag-3-3-4-inacc">
-    <button type="button" class="wcag-primary">Confirmar compra</button>
-    <p class="hint">Sin revisión ni confirmación.</p>
-  </div>
-</ng-template>
-
-<ng-template wcagCaseTemplate="wcag-3-3-4/accessible" let-idPrefix="idPrefix">
-  <div class="wcag-example case-wcag-3-3-4-acc">
-    <h3>Revisar pedido</h3>
-    <p>Total: $150</p>
-    <button type="button">Editar datos</button>
-    <button type="button" class="wcag-primary">Confirmar compra</button>
-    <p [attr.id]="idPrefix + '-confirm-help'" class="hint">Revisa tu pedido antes de confirmar.</p>
+    <label class="wcag-label" [attr.for]="idPrefix + '-date'">Fecha</label>
+    <input
+      [attr.id]="idPrefix + '-date'"
+      type="text"
+      aria-invalid="true"
+      [attr.aria-describedby]="idPrefix + '-date-help ' + idPrefix + '-date-error'"
+    />
+    <div [attr.id]="idPrefix + '-date-help'" class="wcag-hint wcag-hint--format">
+      Formato: DD/MM/AAAA.
+    </div>
+    <div [attr.id]="idPrefix + '-date-error'" class="wcag-error" role="alert">
+      <span class="wcag-error__icon" aria-hidden="true">!</span>
+      Formato de la fecha es inválido
+    </div>
   </div>
 </ng-template>
 
 <!-- 4.1.1 Análisis (HTML bien formado) -->
-<ng-template wcagCaseTemplate="wcag-4-1-1/inaccessible">
+<ng-template wcagCaseTemplate="wcag-4-1-1/inaccessible" let-idPrefix="idPrefix">
   <div class="wcag-example case-wcag-4-1-1-inacc">
-    <pre class="code"><code>&lt;button id=&quot;buy&quot;&gt;Comprar &lt;span&gt;ahora&lt;/button&gt;\n&lt;div id=&quot;buy&quot;&gt;Duplicado&lt;/div&gt;</code></pre>
+    <div class="wcag-subexample wcag-subexample--first">
+      <div class="wcag-primary">Enviar</div>
+      <p class="wcag-example-note">Problema: no es un control semántico; teclado/AT no lo interpretan como botón.</p>
+    </div>
+
+    <div class="wcag-subexample">
+      <label class="wcag-label">Correo</label>
+      <input type="email" placeholder="usuario@ejemplo.com" />
+      <p class="wcag-example-note">Problema: el label no está asociado (falta <strong>for</strong>/<strong>id</strong>).</p>
+    </div>
+
+    <div class="wcag-subexample">
+      <input [attr.id]="idPrefix + '-dup'" type="text" placeholder="Campo A" />
+      <input [attr.id]="idPrefix + '-dup'" type="text" placeholder="Campo B" />
+      <p class="wcag-example-note">Problema: IDs duplicados rompen referencias (labels, aria-describedby, etc.).</p>
+    </div>
+
+    <div class="wcag-subexample">
+      <ul>
+        <span>Texto</span>
+        <li></li>
+        <li>Elemento válido</li>
+      </ul>
+      <p class="wcag-example-note">Problema: HTML mal estructurado, tags <strong>ul</strong> no pueden contener elementos que no sean <strong>li</strong>. Esto es confuso/ruidoso para lectores de pantalla y parsers.</p>
+    </div>
+
+    <div class="wcag-subexample">
+      <div role="status" aria-expanded="true">Cargando…</div>
+      <p class="wcag-example-note">Problema: usar atributos ARIA que el rol no soporta genera experiencias inconsistentes.</p>
+    </div>
   </div>
 </ng-template>
 
-<ng-template wcagCaseTemplate="wcag-4-1-1/accessible">
+<ng-template wcagCaseTemplate="wcag-4-1-1/accessible" let-idPrefix="idPrefix">
   <div class="wcag-example case-wcag-4-1-1-acc">
-    <pre class="code"><code>&lt;button id=&quot;buy&quot;&gt;Comprar &lt;span&gt;ahora&lt;/span&gt;&lt;/button&gt;\n&lt;div id=&quot;buy-summary&quot;&gt;Resumen&lt;/div&gt;</code></pre>
+    <div class="wcag-subexample wcag-subexample--first">
+      <button type="button" class="wcag-primary">Enviar</button>
+      <p class="wcag-example-note">Usa <strong>button</strong> para exponer rol y soporte de teclado.</p>
+    </div>
+
+    <div class="wcag-subexample">
+      <label class="wcag-label" [attr.for]="idPrefix + '-email'">Correo</label>
+      <input [attr.id]="idPrefix + '-email'" type="email" placeholder="usuario@ejemplo.com" />
+      <p class="wcag-example-note"> <strong>For</strong> y <strong>id</strong> para conectar etiqueta y control.</p>
+    </div>
+
+    <div class="wcag-subexample">
+      <input [attr.id]="idPrefix + '-field-a'" type="text" placeholder="Campo A" />
+      <input [attr.id]="idPrefix + '-field-b'" type="text" placeholder="Campo B" />
+      <p class="wcag-example-note">IDs únicos garantizan referencias fiables.</p>
+    </div>
+
+    <div class="wcag-subexample">
+      <ul>
+        <li>Revisar datos</li>
+        <li>Confirmar envío</li>
+      </ul>
+      <p class="wcag-example-note">Correcto: estructura limpia y significativa.</p>
+    </div>
+
+    <div class="wcag-subexample">
+      <div role="status" aria-live="polite">Cargando…</div>
+      <p class="wcag-example-note">Correcto: <strong>role="status"</strong> + <strong>aria-live</strong> sin atributos incompatibles.</p>
+    </div>
   </div>
 </ng-template>
 
 <!-- 4.1.3 Mensajes de estado -->
-<ng-template wcagCaseTemplate="wcag-4-1-3/inaccessible">
+<ng-template wcagCaseTemplate="wcag-4-1-3/inaccessible" let-idPrefix="idPrefix">
   <div class="wcag-example case-wcag-4-1-3-inacc">
-    <button type="button" class="wcag-primary">Agregar</button>
-    <div class="hint">Agregado al carrito (no anunciado).</div>
+      <button
+        *ngIf="ensureAddToCartDemo(idPrefix, 'inaccessible')"
+        type="button"
+        class="wcag-primary"
+        (click)="startAddToCart(idPrefix, 'inaccessible')"
+      >
+        Agregar
+      </button>
+
+      <div *ngIf="isAddToCartLoading(idPrefix, 'inaccessible')" class="wcag-loader">
+        <span class="wcag-loader__spinner" aria-hidden="true"></span>
+        <span>Cargando…</span>
+      </div>
+
+      <div
+        *ngIf="isAddToCartDone(idPrefix, 'inaccessible')"
+        class="hint wcag-fade"
+        [class.wcag-fade--out]="isAddToCartFading(idPrefix, 'inaccessible')"
+      >
+        Agregado.
+      </div>
+
+      <div class="wcag-example-note">Problema: AT no recibe ningun mensaje de estado confiable.
+      </div>
+
   </div>
 </ng-template>
 
 <ng-template wcagCaseTemplate="wcag-4-1-3/accessible" let-idPrefix="idPrefix">
   <div class="wcag-example case-wcag-4-1-3-acc">
-    <button type="button" class="wcag-primary">Agregar</button>
-    <div [attr.id]="idPrefix + '-status'" role="status" aria-live="polite">Listo.</div>
+      <button
+        *ngIf="ensureAddToCartDemo(idPrefix, 'accessible')"
+        type="button"
+        class="wcag-primary"
+        (click)="startAddToCart(idPrefix, 'accessible')"
+      >
+        Agregar
+      </button>
+
+      <div
+        [attr.id]="idPrefix + '-status'"
+        role="status"
+        aria-live="polite"
+        [attr.aria-busy]="isAddToCartLoading(idPrefix, 'accessible') ? 'true' : null"
+      >
+        <div *ngIf="isAddToCartLoading(idPrefix, 'accessible')" class="wcag-loader">
+          <span class="wcag-loader__spinner" aria-hidden="true"></span>
+          <span>Agregando…</span>
+        </div>
+        <span
+          *ngIf="isAddToCartDone(idPrefix, 'accessible')"
+          class="wcag-fade"
+          [class.wcag-fade--out]="isAddToCartFading(idPrefix, 'accessible')"
+        >
+          Agregado.
+        </span>
+      </div>
+
+      <div class="wcag-example-note">
+        <ul>
+            <li>Se utiliza <strong>role="status"</strong> + <strong>aria-live</strong> para comunicar el mensaje, luego el mensaje se desvanece y se limpia.</li>
+            <li>Mientras, la carga se marca <strong>aria-busy="true"</strong> para indicar que el proceso está en curso.</li>
+        </ul>
+      </div>
   </div>
 </ng-template>

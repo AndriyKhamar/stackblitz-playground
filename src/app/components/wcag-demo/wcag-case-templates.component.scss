@@ -16,7 +16,8 @@ label {
   
   /* Unified interactive control styling (buttons + button-like elements) */
   button,
-  [role='button'] {
+  [role='button'],
+  .toggle-button {
     appearance: none;
     -webkit-appearance: none;
     display: inline-flex;
@@ -216,6 +217,137 @@ label {
   outline-offset: 2px;
 }
 
+/* 4.1.2 name/role/value examples */
+.wcag-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.wcag-nav__link {
+  color: #1a73e8;
+  text-decoration: underline;
+}
+
+.wcag-nav__link[aria-current='page'],
+.wcag-nav__link--current {
+  font-weight: 800;
+  text-decoration: none;
+  border-bottom: 2px solid currentColor;
+}
+
+.wcag-fake-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid #999;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.wcag-fake-checkbox__box {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid #999;
+  background: #fff;
+  position: relative;
+}
+
+.wcag-fake-checkbox--checked .wcag-fake-checkbox__box {
+  background: #111827;
+  border-color: #111827;
+}
+
+.wcag-fake-checkbox--checked .wcag-fake-checkbox__box::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.wcag-custom-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 2px solid #1a73e8;
+  border-radius: 10px;
+  background: #eff6ff;
+}
+
+.wcag-custom-checkbox:focus {
+  outline: 3px solid #ffbf47;
+  outline-offset: 2px;
+}
+
+.wcag-custom-checkbox__box {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid #1a73e8;
+  background: #fff;
+  position: relative;
+}
+
+.wcag-custom-checkbox--checked .wcag-custom-checkbox__box {
+  background: #1a73e8;
+}
+
+.wcag-custom-checkbox--checked .wcag-custom-checkbox__box::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.wcag-loader {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid #d0d7de;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.wcag-loader__spinner {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  border-top-color: #1a73e8;
+  animation: wcag-spin 900ms linear infinite;
+}
+
+.wcag-fade {
+  opacity: 1;
+  transition: opacity 350ms ease;
+}
+
+.wcag-fade.wcag-fade--out {
+  opacity: 0;
+}
+
+@keyframes wcag-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .wcag-example-note:last-child {
   margin-top: auto;
 }
@@ -226,6 +358,9 @@ label {
 
 .wcag-field {
   margin: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .wcag-fake-label,
@@ -243,10 +378,36 @@ label {
   border-radius: 8px;
 }
 
+.wcag-input-icon {
+  position: relative;
+}
+
+.wcag-input-icon__icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.wcag-input-icon input {
+  padding-left: 38px;
+}
+
+.wcag-input--error {
+  border-color: #b00020 !important;
+}
+
 .wcag-hint {
   margin: 6px 0 0 0;
   color: #555;
   font-size: 0.9rem;
+}
+
+.wcag-hint--format {
+  color: #166534;
+  font-size: 0.85rem;
 }
 
 .wcag-subexample {
@@ -304,13 +465,44 @@ label {
   font-size: 0.9rem;
 }
 
-
-
 .wcag-error {
   display: inline-block;
   margin-top: 8px;
   color: #b00020;
   font-weight: 800;
+}
+
+.wcag-error__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: #b00020;
+  color: #fff;
+  font-weight: 900;
+  font-size: 0.8rem;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.wcag-validation-error {
+  margin-top: 8px;
+  color: #7f1d1d;
+  font-weight: 700;
+  background: #fff5f5;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.wcag-error--generic {
+  background: #fff5f5;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 8px 10px;
 }
 
 /* 1.2.x media */
@@ -523,6 +715,8 @@ video {
   background: #fff;
   border: 1px solid #eee;
   max-width: 520px;
+  display: flex;
+  gap: 10px;
 }
 
 /* 1.4.12 */

@@ -2,6 +2,9 @@ import { Component, OnDestroy } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FocusTrapMode } from '../../models/focus-trap-mode.enum';
 
+type ErrorIdentificationField = 'email' | 'phone';
+type AddToCartVariant = 'inaccessible' | 'accessible';
+
 @Component({
   selector: 'wcag-case-templates',
   templateUrl: './wcag-case-templates.component.html',
@@ -68,6 +71,48 @@ export class WcagCaseTemplatesComponent implements OnDestroy {
 
   private dataEntryDemoCleanupHandle: any | null = null;
 
+  private readonly errorIdentificationDemoStates = new Map<
+    string,
+    {
+      emailErrorVisible: boolean;
+      phoneErrorVisible: boolean;
+      mountedLastSeenMs: number;
+    }
+  >();
+
+  private errorIdentificationDemoCleanupHandle: any | null = null;
+
+  private readonly ariaCheckboxStates = new Map<
+    string,
+    {
+      checked: boolean;
+      mountedLastSeenMs: number;
+    }
+  >();
+
+  private ariaCheckboxCleanupHandle: any | null = null;
+
+  private readonly fakeCheckboxStates = new Map<
+    string,
+    {
+      checked: boolean;
+      mountedLastSeenMs: number;
+    }
+  >();
+
+  private fakeCheckboxCleanupHandle: any | null = null;
+
+  private readonly addToCartStates = new Map<
+    string,
+    {
+      phase: 'idle' | 'loading' | 'done' | 'fading';
+      mountedLastSeenMs: number;
+      timeoutHandles: any[];
+    }
+  >();
+
+  private addToCartCleanupHandle: any | null = null;
+
   private readonly objectUrls: string[] = [];
   private readonly openPanels = new Set<string>();
   private readonly openModals = new Set<string>();
@@ -102,6 +147,53 @@ export class WcagCaseTemplatesComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.addToCartCleanupHandle) {
+      try {
+        clearInterval(this.addToCartCleanupHandle);
+      } catch {
+        // ignore
+      }
+      this.addToCartCleanupHandle = null;
+    }
+
+    this.addToCartStates.forEach((state) => {
+      if (!state || !state.timeoutHandles) return;
+      for (const handle of state.timeoutHandles) {
+        try {
+          clearTimeout(handle);
+        } catch {
+          // ignore
+        }
+      }
+    });
+
+    if (this.fakeCheckboxCleanupHandle) {
+      try {
+        clearInterval(this.fakeCheckboxCleanupHandle);
+      } catch {
+        // ignore
+      }
+      this.fakeCheckboxCleanupHandle = null;
+    }
+
+    if (this.ariaCheckboxCleanupHandle) {
+      try {
+        clearInterval(this.ariaCheckboxCleanupHandle);
+      } catch {
+        // ignore
+      }
+      this.ariaCheckboxCleanupHandle = null;
+    }
+
+    if (this.errorIdentificationDemoCleanupHandle) {
+      try {
+        clearInterval(this.errorIdentificationDemoCleanupHandle);
+      } catch {
+        // ignore
+      }
+      this.errorIdentificationDemoCleanupHandle = null;
+    }
+
     if (this.dataEntryDemoCleanupHandle) {
       try {
         clearInterval(this.dataEntryDemoCleanupHandle);
@@ -219,6 +311,337 @@ export class WcagCaseTemplatesComponent implements OnDestroy {
     });
 
     return true;
+  }
+
+  ensureErrorIdentificationDemo(idPrefix: string, variant: 'inaccessible' | 'accessible'): boolean {
+    const key = idPrefix + (variant === 'inaccessible' ? '-wcag-3-3-1-inacc' : '-wcag-3-3-1-acc');
+    this.ensureErrorIdentificationDemoCleanupTimer();
+
+    const existing = this.errorIdentificationDemoStates.get(key);
+    if (existing) {
+      existing.mountedLastSeenMs = Date.now();
+      return true;
+    }
+
+    this.errorIdentificationDemoStates.set(key, {
+      emailErrorVisible: false,
+      phoneErrorVisible: false,
+      mountedLastSeenMs: Date.now(),
+    });
+
+    return true;
+  }
+
+  isErrorIdentificationFieldErrorVisible(
+    idPrefix: string,
+    variant: 'inaccessible' | 'accessible',
+    field: ErrorIdentificationField
+  ): boolean {
+    const key = idPrefix + (variant === 'inaccessible' ? '-wcag-3-3-1-inacc' : '-wcag-3-3-1-acc');
+    const state = this.errorIdentificationDemoStates.get(key);
+    if (!state) return false;
+    return field === 'email' ? !!state.emailErrorVisible : !!state.phoneErrorVisible;
+  }
+
+  isErrorIdentificationFormInvalid(idPrefix: string, variant: 'inaccessible' | 'accessible'): boolean {
+    const key = idPrefix + (variant === 'inaccessible' ? '-wcag-3-3-1-inacc' : '-wcag-3-3-1-acc');
+    const state = this.errorIdentificationDemoStates.get(key);
+    return !!state && (!!state.emailErrorVisible || !!state.phoneErrorVisible);
+  }
+
+  clearErrorIdentificationFieldError(
+    idPrefix: string,
+    variant: 'inaccessible' | 'accessible',
+    field: ErrorIdentificationField
+  ): void {
+    const key = idPrefix + (variant === 'inaccessible' ? '-wcag-3-3-1-inacc' : '-wcag-3-3-1-acc');
+    const state = this.errorIdentificationDemoStates.get(key);
+    if (!state) return;
+
+    if (field === 'email') {
+      state.emailErrorVisible = false;
+    } else {
+      state.phoneErrorVisible = false;
+    }
+    state.mountedLastSeenMs = Date.now();
+  }
+
+  onErrorIdentificationSubmit(
+    idPrefix: string,
+    variant: 'inaccessible' | 'accessible',
+    emailValue: string,
+    phoneValue: string,
+    event?: MouseEvent
+  ): void {
+    const key = idPrefix + (variant === 'inaccessible' ? '-wcag-3-3-1-inacc' : '-wcag-3-3-1-acc');
+    this.ensureErrorIdentificationDemo(idPrefix, variant);
+
+    const state = this.errorIdentificationDemoStates.get(key);
+    if (!state) return;
+
+    const emailHasValue = (emailValue || '').trim().length > 0;
+    const phoneHasValue = (phoneValue || '').trim().length > 0;
+
+    state.emailErrorVisible = !emailHasValue;
+    state.phoneErrorVisible = !phoneHasValue;
+    state.mountedLastSeenMs = Date.now();
+
+    if (variant !== 'accessible') return;
+    if (!state.emailErrorVisible && !state.phoneErrorVisible) return;
+
+    const byKeyboard =
+      !!event && typeof (event as any).detail === 'number' && (event as any).detail === 0;
+    if (!byKeyboard) return;
+
+    const inputId = state.emailErrorVisible
+      ? idPrefix + '-wcag-3-3-1-acc-email'
+      : idPrefix + '-wcag-3-3-1-acc-tel';
+
+    setTimeout(() => {
+      try {
+        const el = document.getElementById(inputId) as HTMLElement | null;
+        if (el && typeof el.focus === 'function') {
+          el.focus();
+        }
+      } catch {
+        // ignore
+      }
+    }, 0);
+  }
+
+  ensureAriaCheckboxDemo(idPrefix: string): boolean {
+    const key = idPrefix + '-wcag-4-1-2-aria-checkbox';
+    this.ensureAriaCheckboxCleanupTimer();
+
+    const existing = this.ariaCheckboxStates.get(key);
+    if (existing) {
+      existing.mountedLastSeenMs = Date.now();
+      return true;
+    }
+
+    this.ariaCheckboxStates.set(key, {
+      checked: false,
+      mountedLastSeenMs: Date.now(),
+    });
+    return true;
+  }
+
+  isAriaCheckboxChecked(idPrefix: string): boolean {
+    const key = idPrefix + '-wcag-4-1-2-aria-checkbox';
+    const state = this.ariaCheckboxStates.get(key);
+    return !!state && !!state.checked;
+  }
+
+  toggleAriaCheckbox(idPrefix: string): void {
+    const key = idPrefix + '-wcag-4-1-2-aria-checkbox';
+    this.ensureAriaCheckboxDemo(idPrefix);
+
+    const state = this.ariaCheckboxStates.get(key);
+    if (!state) return;
+
+    state.checked = !state.checked;
+    state.mountedLastSeenMs = Date.now();
+  }
+
+  onAriaCheckboxKeydown(idPrefix: string, event: KeyboardEvent): void {
+    if (!event) return;
+
+    const key = (event.key || '').toLowerCase();
+    const isEnter = key === 'enter';
+    const isSpace = key === ' ' || key === 'spacebar' || key === 'space';
+
+    if (!isEnter && !isSpace) return;
+
+    event.preventDefault();
+    this.toggleAriaCheckbox(idPrefix);
+  }
+
+  private ensureAriaCheckboxCleanupTimer(): void {
+    if (this.ariaCheckboxCleanupHandle) return;
+
+    this.ariaCheckboxCleanupHandle = setInterval(() => {
+      const now = Date.now();
+
+      this.ariaCheckboxStates.forEach((state, key) => {
+        if (!state) return;
+        if (now - (state.mountedLastSeenMs || 0) <= 1500) return;
+        this.ariaCheckboxStates.delete(key);
+      });
+    }, 750);
+  }
+
+  ensureFakeCheckboxDemo(idPrefix: string): boolean {
+    const key = idPrefix + '-wcag-4-1-2-fake-checkbox';
+    this.ensureFakeCheckboxCleanupTimer();
+
+    const existing = this.fakeCheckboxStates.get(key);
+    if (existing) {
+      existing.mountedLastSeenMs = Date.now();
+      return true;
+    }
+
+    this.fakeCheckboxStates.set(key, {
+      checked: false,
+      mountedLastSeenMs: Date.now(),
+    });
+    return true;
+  }
+
+  isFakeCheckboxChecked(idPrefix: string): boolean {
+    const key = idPrefix + '-wcag-4-1-2-fake-checkbox';
+    const state = this.fakeCheckboxStates.get(key);
+    return !!state && !!state.checked;
+  }
+
+  toggleFakeCheckbox(idPrefix: string): void {
+    const key = idPrefix + '-wcag-4-1-2-fake-checkbox';
+    this.ensureFakeCheckboxDemo(idPrefix);
+
+    const state = this.fakeCheckboxStates.get(key);
+    if (!state) return;
+
+    state.checked = !state.checked;
+    state.mountedLastSeenMs = Date.now();
+  }
+
+  private ensureFakeCheckboxCleanupTimer(): void {
+    if (this.fakeCheckboxCleanupHandle) return;
+
+    this.fakeCheckboxCleanupHandle = setInterval(() => {
+      const now = Date.now();
+
+      this.fakeCheckboxStates.forEach((state, key) => {
+        if (!state) return;
+        if (now - (state.mountedLastSeenMs || 0) <= 1500) return;
+        this.fakeCheckboxStates.delete(key);
+      });
+    }, 750);
+  }
+
+  ensureAddToCartDemo(idPrefix: string, variant: AddToCartVariant): boolean {
+    const key = idPrefix + (variant === 'accessible' ? '-wcag-4-1-3-acc' : '-wcag-4-1-3-inacc');
+    this.ensureAddToCartCleanupTimer();
+
+    const existing = this.addToCartStates.get(key);
+    if (existing) {
+      existing.mountedLastSeenMs = Date.now();
+      return true;
+    }
+
+    this.addToCartStates.set(key, {
+      phase: 'idle',
+      mountedLastSeenMs: Date.now(),
+      timeoutHandles: [],
+    });
+
+    return true;
+  }
+
+  isAddToCartLoading(idPrefix: string, variant: AddToCartVariant): boolean {
+    const key = idPrefix + (variant === 'accessible' ? '-wcag-4-1-3-acc' : '-wcag-4-1-3-inacc');
+    const state = this.addToCartStates.get(key);
+    return !!state && state.phase === 'loading';
+  }
+
+  isAddToCartDone(idPrefix: string, variant: AddToCartVariant): boolean {
+    const key = idPrefix + (variant === 'accessible' ? '-wcag-4-1-3-acc' : '-wcag-4-1-3-inacc');
+    const state = this.addToCartStates.get(key);
+    return !!state && (state.phase === 'done' || state.phase === 'fading');
+  }
+
+  isAddToCartFading(idPrefix: string, variant: AddToCartVariant): boolean {
+    const key = idPrefix + (variant === 'accessible' ? '-wcag-4-1-3-acc' : '-wcag-4-1-3-inacc');
+    const state = this.addToCartStates.get(key);
+    return !!state && state.phase === 'fading';
+  }
+
+  startAddToCart(idPrefix: string, variant: AddToCartVariant): void {
+    const key = idPrefix + (variant === 'accessible' ? '-wcag-4-1-3-acc' : '-wcag-4-1-3-inacc');
+    this.ensureAddToCartDemo(idPrefix, variant);
+
+    const state = this.addToCartStates.get(key);
+    if (!state) return;
+
+    if (state.timeoutHandles && state.timeoutHandles.length) {
+      for (const handle of state.timeoutHandles) {
+        try {
+          clearTimeout(handle);
+        } catch {
+          // ignore
+        }
+      }
+      state.timeoutHandles = [];
+    }
+
+    state.phase = 'loading';
+    state.mountedLastSeenMs = Date.now();
+
+    const loadingHandle = setTimeout(() => {
+      const current = this.addToCartStates.get(key);
+      if (!current) return;
+      current.phase = 'done';
+      current.mountedLastSeenMs = Date.now();
+
+      const hideHandle = setTimeout(() => {
+        const afterDone = this.addToCartStates.get(key);
+        if (!afterDone) return;
+        afterDone.phase = 'fading';
+        afterDone.mountedLastSeenMs = Date.now();
+
+        const removeHandle = setTimeout(() => {
+          const afterFade = this.addToCartStates.get(key);
+          if (!afterFade) return;
+          afterFade.phase = 'idle';
+          afterFade.mountedLastSeenMs = Date.now();
+          afterFade.timeoutHandles = [];
+        }, 350);
+
+        afterDone.timeoutHandles.push(removeHandle);
+      }, 2000);
+
+      current.timeoutHandles.push(hideHandle);
+    }, 2000);
+
+    state.timeoutHandles.push(loadingHandle);
+  }
+
+  private ensureAddToCartCleanupTimer(): void {
+    if (this.addToCartCleanupHandle) return;
+
+    this.addToCartCleanupHandle = setInterval(() => {
+      const now = Date.now();
+
+      this.addToCartStates.forEach((state, key) => {
+        if (!state) return;
+
+        if (now - (state.mountedLastSeenMs || 0) <= 1500) return;
+
+        if (state.timeoutHandles && state.timeoutHandles.length) {
+          for (const handle of state.timeoutHandles) {
+            try {
+              clearTimeout(handle);
+            } catch {
+              // ignore
+            }
+          }
+        }
+        this.addToCartStates.delete(key);
+      });
+    }, 750);
+  }
+
+  private ensureErrorIdentificationDemoCleanupTimer(): void {
+    if (this.errorIdentificationDemoCleanupHandle) return;
+
+    this.errorIdentificationDemoCleanupHandle = setInterval(() => {
+      const now = Date.now();
+
+      this.errorIdentificationDemoStates.forEach((state, key) => {
+        if (!state) return;
+        if (now - (state.mountedLastSeenMs || 0) <= 1500) return;
+        this.errorIdentificationDemoStates.delete(key);
+      });
+    }, 750);
   }
 
   getDataEntryValue(idPrefix: string, variant: 'inaccessible' | 'accessible'): string {
