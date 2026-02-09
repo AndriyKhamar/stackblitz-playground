@@ -854,8 +854,12 @@ video {
   background: #fff;
   transition: background 0.4s ease;
   border: 1px solid #ddd;
-    animation: wcagFlash 1s infinite;
+}
 
+@media (prefers-reduced-motion: reduce) {
+  .flash {
+    animation: none !important;
+  }
 }
 
 .yes-outline:focus {

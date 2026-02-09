@@ -6,36 +6,51 @@ Este componente Angular presenta una **demo educativa interactiva** sobre accesi
 
 ## Características
 
-✅ **12 criterios WCAG 2.1 clave** cubiertos
-✅ **Comparación visual** de código correcto e incorrecto
-✅ **Totalmente accesible** (cumple WCAG AA)
-✅ **Navegable por teclado** (Tab, Enter)
+✅ **25+ criterios WCAG 2.1** cubiertos (ver datos en `wcag-cases.data.ts`)
+✅ **Comparación visual + código fuente** (ejemplo no accesible vs accesible)
+✅ **UI de la demo pensada para ser accesible**, pero incluye ejemplos *intencionalmente no accesibles* para fines educativos
+✅ **Navegable por teclado** (Tab, Enter/Espacio)
 ✅ **Soporte para lectores de pantalla** (ARIA)
 ✅ **Responsive design** (mobile-friendly)
-✅ **Sin dependencias externas** (solo Angular 7)
+⚠️ **Angular 7 (EOL)**: recomendado solo como demo; no se sugiere publicar como producción sin actualizar dependencias
+ℹ️ Usa algunos **recursos externos** (imágenes/audio/vídeo) para las demos multimedia (ver “Recursos externos” abajo)
 
-## Criterios WCAG 2.1 Cubiertos
+## Criterios WCAG 2.1 cubiertos
 
-### Perceptibilidad
-- **1.1.1** Contenido no textual (alternativas de texto)
-- **1.3.1** Información y relaciones (marcado semántico)
-- **1.3.2** Secuencia significativa (orden lógico)
-- **1.4.3** Contraste mínimo (legibilidad visual)
-- **1.4.4** Redimensionamiento de texto (escalabilidad)
+La demo incluye criterios repartidos en las 4 “pilares” (Perceptible/Operable/Comprensible/Robusto). La lista completa vive en `src/app/components/wcag-demo/wcag-cases.data.ts`.
 
-### Operabilidad
-- **2.1.1** Teclado (acceso sin ratón)
-- **2.4.1** Saltar contenido (skip links)
-- **2.4.4** Propósito del enlace (link descriptivos)
-- **2.4.6** Encabezados y etiquetas (jerarquía clara)
-- **2.5.3** Etiqueta en el nombre (coincidencia visual-accesible)
+### Ejemplos (no exhaustivo)
 
-### Comprensibilidad
-- **3.3.1** Identificación de errores (mensajes de error accesibles)
-- **3.3.2** Etiquetas o instrucciones (claridad en formularios)
+Perceptible:
+- **1.1.1** Contenido no textual
+- **1.2.1/1.2.2/1.2.3** Alternativas multimedia (audio/vídeo)
+- **1.3.x** Relaciones, secuencia, instrucciones sensoriales
+- **1.4.x** Contraste, reflow, espaciado, contenido al foco/hover
 
-### Robustez
-- **4.1.2** Nombre, rol y valor (compatibilidad con AT)
+Operable:
+- **2.1.x** Teclado y trampas de teclado
+- **2.2.x** Tiempo ajustable y carruseles/animaciones
+- **2.3.1** Flashes (demo de parpadeo rápido)
+- **2.4.x** Navegación, orden de foco, foco visible
+- **2.5.x** Gestos con puntero
+
+Comprensible:
+- **3.1.x** Idioma
+- **3.2.x** Cambios de contexto al foco / ingreso de datos
+- **3.3.x** Errores y sugerencias
+
+Robusto:
+- **4.1.1** HTML analizable
+- **4.1.2** Nombre/rol/valor
+- **4.1.3** Mensajes de estado
+
+Para ver exactamente qué casos se renderizan, consulta `src/app/components/wcag-demo/wcag-case-templates.component.html`.
+
+## Advertencias (seguridad y bienestar)
+
+- **Contenido parpadeante (2.3.1):** existe un ejemplo con animación rápida (`.flash`). Evita abrir ese caso si eres sensible a flashes. Si tu sistema usa “reducir movimiento”, la demo intenta respetarlo.
+- **Recursos externos:** algunos ejemplos cargan recursos remotos (Pexels / MDN). Esto implica dependencia de disponibilidad/red y exposición de metadatos (IP/User-Agent) hacia terceros.
+- **Sanitización Angular:** el componente de templates usa `DomSanitizer.bypassSecurityTrustResourceUrl` para URLs internas (Object URL de VTT). No reutilizar este patrón con datos no confiables.
 
 ## Estructura de Archivos
 
@@ -71,6 +86,15 @@ export class AppModule {}
 ```bash
 npm run start
 # La demo se abrirá en http://localhost:4200
+```
+
+### Notas de compatibilidad (Node/SSL)
+
+Este repo usa Angular CLI 7 (stack antiguo). En máquinas con Node moderno (p. ej. Node 17+), puede requerir OpenSSL legacy. Se incluyen scripts:
+
+```bash
+npm run start:legacy
+npm run build:legacy
 ```
 
 ## Funcionalidades Interactivas
@@ -314,5 +338,5 @@ Este componente es parte de un proyecto educativo sobre accesibilidad web.
 ---
 
 **Última actualización:** Febrero 2026
-**Compatibilidad:** Angular 7+
-**Estado:** Producción
+**Compatibilidad:** Angular 7.2.x (EOL)
+**Estado:** Demo educativa (no recomendado para producción sin actualización de dependencias)
