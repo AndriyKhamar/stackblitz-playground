@@ -25,3 +25,17 @@ npm run start:legacy
 ## Nota
 
 La demo incluye ejemplos *intencionalmente no accesibles* (p. ej. un caso con parpadeos rápidos para WCAG 2.3.1). Úsalo con fines educativos.
+
+## Deploy (GitHub Pages)
+
+Este repo incluye scripts para publicar en GitHub Pages apuntando a **root** (base-href `/`).
+
+```bash
+npm run deploy:ghpages
+```
+
+Si estás en Node moderno y necesitas OpenSSL legacy:
+
+```bash
+npm run deploy:ghpages:legacy
+```

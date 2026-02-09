@@ -8,7 +8,12 @@
     "start:4201": "ng serve --port 4201",
     "start:legacy": "cross-env NODE_OPTIONS=--openssl-legacy-provider ng serve",
     "build": "ng build",
-    "build:legacy": "cross-env NODE_OPTIONS=--openssl-legacy-provider ng build"
+    "build:legacy": "cross-env NODE_OPTIONS=--openssl-legacy-provider ng build",
+    "build:ghpages": "ng build --configuration=production --base-href /",
+    "build:ghpages:legacy": "cross-env NODE_OPTIONS=--openssl-legacy-provider ng build --configuration=production --base-href /",
+    "postbuild:ghpages": "node -e \"const fs=require('fs');const path=require('path');const outDir=path.join('dist','demo');const src=path.join(outDir,'index.html');const dst=path.join(outDir,'404.html');if(fs.existsSync(src)) fs.copyFileSync(src,dst);\"",
+    "deploy:ghpages": "npm run build:ghpages && npm run postbuild:ghpages && gh-pages -d dist/demo",
+    "deploy:ghpages:legacy": "npm run build:ghpages:legacy && npm run postbuild:ghpages && gh-pages -d dist/demo"
   },
   "dependencies": {
     "@angular/animations": "7.2.15",
@@ -31,6 +36,7 @@
     "@angular/language-service": "7.2.15",
     "@types/node": "~8.9.4",
     "cross-env": "^7.0.3",
+    "gh-pages": "^5.0.0",
     "sass": "^1.94.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",

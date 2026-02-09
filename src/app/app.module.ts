@@ -7,11 +7,13 @@ import { CheckboxComponent } from './components/accesible-checkbox/checkbox.comp
 import { StepperComponent } from './components/stepper/stepper.component';
 import { DestinationFilterComponent } from './components/filters/destination-filter.component';
 import { WeekCalendarComponent } from './components/calendar/week-calendar.component';
+import { CardComponent } from './components/card/card.component';
 import { WCAGDemoComponent } from './components/wcag-demo/wcag-demo.component';
 import { WcagCaseTemplateDirective } from './components/wcag-demo/wcag-case-template.directive';
 import { WcagCaseTemplatesComponent } from './components/wcag-demo/wcag-case-templates.component';
 import { FocusTrapDirective } from './directives/focus.trap.directive';
 import { ComboWrapperComponent } from './components/combo-wrapper/combo-wrapper.component';
+import { TooltipDirective } from './directives/tooltip.directive';
 
 @NgModule({
   declarations: [
@@ -20,11 +22,13 @@ import { ComboWrapperComponent } from './components/combo-wrapper/combo-wrapper.
     StepperComponent,
     DestinationFilterComponent,
     WeekCalendarComponent,
+    CardComponent,
     WCAGDemoComponent,
     ComboWrapperComponent,
     WcagCaseTemplateDirective,
     WcagCaseTemplatesComponent,
     FocusTrapDirective,
+    TooltipDirective,
   ],
   imports: [BrowserModule, CommonModule],
   providers: [],
